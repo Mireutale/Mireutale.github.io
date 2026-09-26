@@ -1,0 +1,50 @@
+:root {
+  --color-bg: #f7f4ed;
+  --color-text: #1c1c1c;
+  --color-text-strong: rgba(28, 28, 28, 0.83);
+  --color-muted: #5f5f5d;
+  --color-border: #eceae4;
+  --color-border-strong: rgba(28, 28, 28, 0.4);
+  --color-tint: rgba(28, 28, 28, 0.04);
+  --color-inverse-bg: #1c1c1c;
+  --color-inverse-text: #fcfbf8;
+
+  --font-sans: 'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --text-hero: clamp(2.5rem, 1.4rem + 4.5vw, 3.75rem);
+  --text-section: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  --text-card: 1.25rem;
+  --text-lg: 1.125rem;
+  --text-base: 1rem;
+  --text-sm: 0.875rem;
+
+  --space-section: clamp(4rem, 3rem + 5vw, 9rem);
+  --container: 1120px;
+  --gutter: clamp(1rem, 0.5rem + 3vw, 2.5rem);
+
+  --radius-btn: 6px;
+  --radius-card: 12px;
+  --radius-pill: 9999px;
+
+  --shadow-inset: rgba(255, 255, 255, 0.2) 0 0.5px 0 0 inset, rgba(0, 0, 0, 0.2) 0 0 0 0.5px inset, rgba(0, 0, 0, 0.05) 0 1px 2px 0;
+  --shadow-focus: rgba(0, 0, 0, 0.1) 0 4px 12px;
+
+  --duration: 180ms;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg: #1c1c1c;
+    --color-text: #f7f4ed;
+    --color-text-strong: rgba(247, 244, 237, 0.85);
+    --color-muted: #a8a49b;
+    --color-border: #2c2b28;
+    --color-border-strong: rgba(247, 244, 237, 0.4);
+    --color-tint: rgba(247, 244, 237, 0.05);
+    --color-inverse-bg: #f7f4ed;
+    --color-inverse-text: #1c1c1c;
+    --shadow-inset: rgba(0, 0, 0, 0.25) 0 0.5px 0 0 inset, rgba(255, 255, 255, 0.25) 0 0 0 0.5px inset;
+    --shadow-focus: rgba(0, 0, 0, 0.5) 0 4px 12px;
+  }
+}

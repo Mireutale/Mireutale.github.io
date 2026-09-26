@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Projects from '../components/Projects.astro';
+import Skills from '../components/Skills.astro';
+import Footer from '../components/Footer.astro';
+import { profile } from '../data/profile';
+---
+
+<Base title={`${profile.name} · ${profile.nameEn}`} description={profile.tagline}>
+  <Nav />
+  <main>
+    <Hero />
+    <Projects />
+    <Skills />
+  </main>
+  <Footer />
+</Base>

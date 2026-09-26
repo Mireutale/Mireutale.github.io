@@ -1,0 +1,89 @@
+---
+import { profile } from '../data/profile';
+---
+
+<section id="top" class="hero section" aria-labelledby="hero-heading">
+  <div class="container hero-grid">
+    <div class="hero-main">
+      <p class="eyebrow">{profile.nameEn} · Backend Developer</p>
+      <h1 id="hero-heading">{profile.tagline}</h1>
+      <p class="lead">{profile.intro}</p>
+      <div class="actions">
+        <a class="btn btn-dark" href="#projects">프로젝트 보기</a>
+        <a class="btn btn-ghost" href={profile.github} target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <dl class="facts">
+      {
+        profile.facts.map((f) => (
+          <div class="fact">
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(4rem, 3rem + 6vw, 9rem);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: end;
+  }
+  .eyebrow {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: 1.25rem;
+  }
+  h1 {
+    font-size: var(--text-hero);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+  }
+  .lead {
+    margin-top: 1.5rem;
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    color: var(--color-text-strong);
+    max-width: 38em;
+    word-break: keep-all;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .facts {
+    margin: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .fact {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+  }
+  dt {
+    color: var(--color-muted);
+  }
+  dd {
+    margin: 0;
+    word-break: keep-all;
+  }
+  @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

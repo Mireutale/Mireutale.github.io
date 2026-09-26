@@ -1,0 +1,103 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class:list={['card', { featured: project.featured }]}>
+  <div class="meta">
+    <span>{project.period}</span>
+    <span class="dot" aria-hidden="true"></span>
+    <span>{project.type} 프로젝트</span>
+  </div>
+  <h3><a href={project.repo} target="_blank" rel="noopener">{project.name}</a></h3>
+  <p class="summary">{project.summary}</p>
+  <ul class="stack" aria-label="기술 스택">
+    {project.stack.map((s) => <li>{s}</li>)}
+  </ul>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+  }
+  .card:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-tint);
+  }
+  .featured {
+    grid-column: span 2;
+    padding: 2rem;
+  }
+  .featured h3 {
+    font-size: var(--text-section);
+    letter-spacing: -0.025em;
+  }
+  .featured .summary {
+    font-size: var(--text-lg);
+    max-width: 36em;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  h3 {
+    font-size: var(--text-card);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  h3 a {
+    text-decoration: none;
+  }
+  h3 a::after {
+    content: ' ↗';
+    color: var(--color-muted);
+    font-weight: 400;
+  }
+  .summary {
+    color: var(--color-muted);
+    line-height: 1.55;
+    word-break: keep-all;
+    flex: 1;
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stack li {
+    padding: 2px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 0.8125rem;
+  }
+  @media (max-width: 768px) {
+    .featured {
+      grid-column: span 1;
+      padding: 1.5rem;
+    }
+  }
+</style>
