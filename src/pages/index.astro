@@ -4,16 +4,39 @@ import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
 import Projects from '../components/Projects.astro';
 import Skills from '../components/Skills.astro';
+import Rail from '../components/Rail.astro';
 import Footer from '../components/Footer.astro';
 import { profile } from '../data/profile';
 ---
 
 <Base title={`${profile.name} · ${profile.nameEn}`} description={profile.tagline}>
   <Nav />
-  <main>
-    <Hero />
-    <Projects />
-    <Skills />
-  </main>
+  <Hero />
+  <div class="container body">
+    <main class="content">
+      <Projects />
+      <Skills />
+    </main>
+    <Rail />
+  </div>
   <Footer />
 </Base>
+
+<style>
+  .body {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--s-lg);
+    margin-top: var(--s-lg);
+  }
+  .content {
+    display: grid;
+    gap: var(--s-lg);
+    align-content: start;
+  }
+  @media (max-width: 720px) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

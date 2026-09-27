@@ -1,50 +1,55 @@
 :root {
-  --color-bg: #f7f4ed;
-  --color-text: #1c1c1c;
-  --color-text-strong: rgba(28, 28, 28, 0.83);
-  --color-muted: #5f5f5d;
-  --color-border: #eceae4;
-  --color-border-strong: rgba(28, 28, 28, 0.4);
-  --color-tint: rgba(28, 28, 28, 0.04);
-  --color-inverse-bg: #1c1c1c;
-  --color-inverse-text: #fcfbf8;
+  --c-primary: #e60012;
+  --c-signal: #f68d1f;
+  --c-amber: #ecab37;
+  --c-nav-gold: #e48600;
+  --c-canvas: #7a8aba;
+  --c-canvas-soft: #9fbee7;
+  --c-lavender: #acace7;
+  --c-ice: #c0d5e6;
+  --c-periwinkle: #8ba1d4;
+  --c-chrome-indigo: #3d4f97;
+  --c-muted-indigo: #60619c;
+  --c-platinum: #dedede;
+  --c-surface: #ffffff;
+  --c-carbon: #21242e;
+  --c-hairline: #5a5f8c;
+  --c-ink: #21242e;
+  --c-ink-soft: #3d4f97;
+  --c-on-primary: #ffffff;
+  --c-systems-teal: #206479;
 
-  --font-sans: 'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-ui: Arial, Helvetica, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-display: 'Archivo Black', 'Arial Black', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-pixel: 'Silkscreen', monospace;
 
-  --text-hero: clamp(2.5rem, 1.4rem + 4.5vw, 3.75rem);
-  --text-section: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
-  --text-card: 1.25rem;
-  --text-lg: 1.125rem;
-  --text-base: 1rem;
-  --text-sm: 0.875rem;
+  --t-display: clamp(28px, 4.5vw, 44px);
+  --t-tagline: 15px;
+  --t-nav: 13px;
+  --t-label: 11px;
+  --t-link: 12px;
+  --t-body: 12px;
+  --t-micro: 10px;
 
-  --space-section: clamp(4rem, 3rem + 5vw, 9rem);
-  --container: 1120px;
-  --gutter: clamp(1rem, 0.5rem + 3vw, 2.5rem);
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
 
-  --radius-btn: 6px;
-  --radius-card: 12px;
-  --radius-pill: 9999px;
+  --s-xxs: 2px;
+  --s-xs: 4px;
+  --s-sm: 8px;
+  --s-md: 12px;
+  --s-lg: 16px;
+  --s-xl: 24px;
+  --s-xxl: 32px;
+  --s-section: 48px;
 
-  --shadow-inset: rgba(255, 255, 255, 0.2) 0 0.5px 0 0 inset, rgba(0, 0, 0, 0.2) 0 0 0 0.5px inset, rgba(0, 0, 0, 0.05) 0 1px 2px 0;
-  --shadow-focus: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  --container: 830px;
 
-  --duration: 180ms;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --color-bg: #1c1c1c;
-    --color-text: #f7f4ed;
-    --color-text-strong: rgba(247, 244, 237, 0.85);
-    --color-muted: #a8a49b;
-    --color-border: #2c2b28;
-    --color-border-strong: rgba(247, 244, 237, 0.4);
-    --color-tint: rgba(247, 244, 237, 0.05);
-    --color-inverse-bg: #f7f4ed;
-    --color-inverse-text: #1c1c1c;
-    --shadow-inset: rgba(0, 0, 0, 0.25) 0 0.5px 0 0 inset, rgba(255, 255, 255, 0.25) 0 0 0 0.5px inset;
-    --shadow-focus: rgba(0, 0, 0, 0.5) 0 4px 12px;
-  }
+  --bevel-plate: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 var(--c-chrome-indigo), 0 1px 0 var(--c-chrome-indigo);
+  --bevel-inset: inset 0 1px 0 var(--c-chrome-indigo), inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+  --bevel-chip: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(0, 0, 0, 0.35), 0 1px 0 rgba(0, 0, 0, 0.4);
+  --halftone: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.2px);
+  --chamfer: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
 }

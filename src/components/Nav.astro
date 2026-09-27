@@ -2,48 +2,141 @@
 import { profile } from '../data/profile';
 ---
 
-<header class="nav">
-  <div class="container nav-inner">
-    <a href="#top" class="wordmark">{profile.nameEn}</a>
-    <nav aria-label="주요 메뉴">
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#contact">Contact</a>
-    </nav>
+<div class="masthead container">
+  <div class="mascot" aria-hidden="true">
+    <span class="mascot-face">TK</span>
+    <span class="bubble micro">Welcome to mireutale.github.io!</span>
+  </div>
+  <a class="chip chip-carbon" href={profile.github} target="_blank" rel="noopener">GitHub ▸</a>
+</div>
+
+<header class="container">
+  <nav class="navbar" aria-label="주요 메뉴">
+    <a href="#top" class="logo-pill">{profile.nameEn}</a>
+    <ul class="links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="chip" href={`mailto:${profile.email}`}>Mail Me</a>
+  </nav>
+  <div class="subnav label">
+    <span>Backend</span><span>Infra</span><span>Pusan Nat'l Univ.</span><span>AI·SW Maestro 17</span>
   </div>
 </header>
 
 <style>
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border);
+  .masthead {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-md);
+    padding: var(--s-md) 0 var(--s-xs);
   }
-  .nav-inner {
+  .mascot {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 56px;
+    gap: var(--s-sm);
   }
-  .wordmark {
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    text-decoration: none;
+  .mascot-face {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-sm);
+    background: var(--c-primary);
+    color: var(--c-surface);
+    font: 900 14px/1 var(--font-display);
+    box-shadow: var(--bevel-chip);
   }
-  nav {
+  .bubble {
+    position: relative;
+    padding: var(--s-sm) var(--s-md);
+    border-radius: var(--r-lg);
+    background: var(--c-surface);
+    color: var(--c-carbon);
+  }
+  .bubble::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    border: 6px solid transparent;
+    border-right-color: var(--c-surface);
+    border-left: 0;
+    transform: translateY(-50%);
+  }
+  .navbar {
     display: flex;
-    gap: 1.5rem;
-    font-size: var(--text-sm);
+    align-items: center;
+    gap: var(--s-md);
+    min-height: 40px;
+    padding: var(--s-xs) var(--s-sm);
+    background: var(--c-carbon);
+    background-image: var(--halftone);
+    background-size: 4px 4px;
+    clip-path: var(--chamfer);
   }
-  nav a {
+  .logo-pill {
+    padding: 3px 12px;
+    border-radius: 9999px;
+    background: var(--c-surface);
+    color: var(--c-primary);
+    font: 900 14px/1.2 var(--font-display);
+    letter-spacing: -0.02em;
+    box-shadow: 0 0 0 2px var(--c-primary), 0 0 0 3px var(--c-surface);
+  }
+  .logo-pill:hover {
     text-decoration: none;
-    color: var(--color-muted);
-    transition: color var(--duration) var(--ease);
   }
-  nav a:hover {
-    color: var(--color-text);
+  .links {
+    display: flex;
+    flex: 1;
+    gap: var(--s-lg);
+    padding: 0;
+    list-style: none;
+  }
+  .links a {
+    color: var(--c-nav-gold);
+    font-size: var(--t-nav);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 0 6px rgba(228, 134, 0, 0.5);
+  }
+  .links a:hover {
+    color: var(--c-amber);
+    text-decoration: none;
+  }
+  .subnav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: var(--s-xs) var(--s-sm);
+    background: var(--c-canvas-soft);
+    box-shadow: var(--bevel-inset);
+    color: var(--c-ink);
+  }
+  .subnav span {
+    padding: 2px var(--s-sm);
+    border-right: 1px solid var(--c-hairline);
+  }
+  .subnav span:last-child {
+    border-right: 0;
+  }
+  @media (max-width: 720px) {
+    .navbar {
+      flex-wrap: wrap;
+    }
+    .links {
+      order: 3;
+      flex-basis: 100%;
+      gap: var(--s-md);
+      padding-top: var(--s-xs);
+    }
+    .bubble {
+      display: none;
+    }
   }
 </style>

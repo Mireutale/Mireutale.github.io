@@ -3,46 +3,64 @@ import { profile } from '../data/profile';
 const year = new Date().getFullYear();
 ---
 
-<footer id="contact" class="section" aria-labelledby="contact-heading">
-  <div class="container">
-    <div class="box">
-      <h2 id="contact-heading">함께 고민할 문제가 있다면<br />언제든 연락 주세요.</h2>
-      <div class="links">
-        <a class="btn btn-dark" href={`mailto:${profile.email}`}>{profile.email}</a>
-        <a class="btn btn-ghost" href={profile.github} target="_blank" rel="noopener">github.com/Mireutale</a>
-      </div>
+<footer id="contact" class="container">
+  <div class="poll">
+    <h2 class="label">Player's Contact</h2>
+    <p>함께 고민할 문제가 있다면 언제든 연락 주세요.</p>
+    <div class="actions">
+      <a class="chip chip-submit" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <a class="chip" href={profile.github} target="_blank" rel="noopener">github.com/Mireutale</a>
     </div>
-    <p class="copy">© {year} {profile.name}. Built with Astro.</p>
+  </div>
+  <div class="bar micro">
+    <span>©{year} {profile.name}. All rights reserved.</span>
+    <span class="badge">BUILT WITH ASTRO</span>
   </div>
 </footer>
 
 <style>
-  .box {
-    padding: clamp(2rem, 1.5rem + 3vw, 4rem);
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
+  footer {
+    margin-top: var(--s-lg);
+    margin-bottom: var(--s-xl);
   }
-  h2 {
-    font-size: var(--text-section);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.025em;
+  .poll {
+    padding: var(--s-md);
+    border-radius: var(--r-md);
+    background: var(--c-periwinkle);
+    box-shadow: var(--bevel-plate);
+  }
+  .poll p {
+    margin-top: var(--s-xs);
+    font-weight: 700;
     word-break: keep-all;
   }
-  .links {
+  .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--s-sm);
+    margin-top: var(--s-md);
   }
-  .copy {
-    margin-top: 2rem;
-    font-size: var(--text-sm);
-    color: var(--color-muted);
-    text-align: center;
+  .actions .chip {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-sm);
+    margin-top: var(--s-sm);
+    padding: var(--s-lg);
+    background: var(--c-carbon);
+    background-image: var(--halftone);
+    background-size: 4px 4px;
+    color: var(--c-canvas-soft);
+    clip-path: var(--chamfer);
+  }
+  .badge {
+    padding: 2px 6px;
+    border-radius: var(--r-xs);
+    background: var(--c-amber);
+    color: var(--c-carbon);
   }
 </style>
