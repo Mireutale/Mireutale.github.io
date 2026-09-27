@@ -1,0 +1,61 @@
+---
+import { profile } from '../data/profile';
+---
+
+<section id="awards" class="section" aria-labelledby="awards-heading">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Awards & Activities</p>
+      <h2 id="awards-heading" class="section-title display">수상 및 대외 활동</h2>
+    </div>
+    <ol class="list">
+      {
+        profile.awards.map((a) => (
+          <li class="row">
+            <span class="date">{a.date}</span>
+            <span class="title">{a.title}</span>
+            <span class="org">{a.org} · {a.team}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .list {
+    padding: 0;
+    list-style: none;
+    border-radius: var(--r-lg);
+    background: var(--c-surface-card);
+    overflow: hidden;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: var(--s-md);
+    align-items: baseline;
+    padding: var(--s-md) var(--s-lg);
+    border-bottom: 1px solid rgba(10, 10, 10, 0.06);
+    word-break: keep-all;
+  }
+  .row:last-child {
+    border-bottom: 0;
+  }
+  .date,
+  .org {
+    font-size: var(--t-body-sm);
+    color: var(--c-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .title {
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: var(--s-xxs);
+    }
+  }
+</style>

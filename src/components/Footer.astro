@@ -3,64 +3,45 @@ import { profile } from '../data/profile';
 const year = new Date().getFullYear();
 ---
 
-<footer id="contact" class="container">
-  <div class="poll">
-    <h2 class="label">Player's Contact</h2>
-    <p>함께 고민할 문제가 있다면 언제든 연락 주세요.</p>
-    <div class="actions">
-      <a class="chip chip-submit" href={`mailto:${profile.email}`}>{profile.email}</a>
-      <a class="chip" href={profile.github} target="_blank" rel="noopener">github.com/Mireutale</a>
+<footer id="contact">
+  <div class="container">
+    <div class="cta">
+      <h2 class="display">함께 고민할 문제가 있다면<br />언제든 연락 주세요.</h2>
+      <div class="actions">
+        <a class="btn btn-primary" href={`mailto:${profile.email}`}>{profile.email}</a>
+        <a class="btn btn-secondary" href={profile.github} target="_blank" rel="noopener">github.com/Mireutale</a>
+      </div>
     </div>
-  </div>
-  <div class="bar micro">
-    <span>©{year} {profile.name}. All rights reserved.</span>
-    <span class="badge">BUILT WITH ASTRO</span>
+    <p class="copy">© {year} {profile.name} · {profile.email} · References on request</p>
   </div>
 </footer>
 
 <style>
   footer {
-    margin-top: var(--s-lg);
-    margin-bottom: var(--s-xl);
+    padding-block: var(--s-section) var(--s-xxl);
   }
-  .poll {
-    padding: var(--s-md);
-    border-radius: var(--r-md);
-    background: var(--c-periwinkle);
-    box-shadow: var(--bevel-plate);
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-xl);
+    padding: clamp(40px, 3rem + 3vw, 80px);
+    border-radius: var(--r-xl);
+    background: var(--c-surface-soft);
   }
-  .poll p {
-    margin-top: var(--s-xs);
-    font-weight: 700;
-    word-break: keep-all;
+  h2 {
+    font-size: var(--t-display-md);
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--s-sm);
-    margin-top: var(--s-md);
   }
-  .actions .chip {
-    text-transform: none;
-    letter-spacing: 0;
-  }
-  .bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--s-sm);
-    margin-top: var(--s-sm);
-    padding: var(--s-lg);
-    background: var(--c-carbon);
-    background-image: var(--halftone);
-    background-size: 4px 4px;
-    color: var(--c-canvas-soft);
-    clip-path: var(--chamfer);
-  }
-  .badge {
-    padding: 2px 6px;
-    border-radius: var(--r-xs);
-    background: var(--c-amber);
-    color: var(--c-carbon);
+  .copy {
+    margin-top: var(--s-xl);
+    font-size: var(--t-body-sm);
+    color: var(--c-muted);
+    text-align: center;
   }
 </style>

@@ -3,93 +3,85 @@ import { profile } from '../data/profile';
 ---
 
 <section id="top" class="hero container" aria-labelledby="hero-heading">
-  <div class="field">
-    <div class="copy">
-      <p class="label eyebrow">{profile.nameEn} · Backend Developer</p>
-      <h1 id="hero-heading" class="boxart">{profile.tagline}</h1>
-      <p class="tagline">{profile.intro}</p>
-      <a class="go" href="#projects"><span class="arrow-disc">▶</span><span class="label">Play It On · Projects</span></a>
+  <div class="copy">
+    <p class="eyebrow">{profile.role} · {profile.nameEn}</p>
+    <h1 id="hero-heading" class="display">{profile.name}</h1>
+    <p class="lead">{profile.tagline}</p>
+    <div class="links">
+      <a class="btn btn-primary" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <a class="btn btn-secondary" href={profile.github} target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-secondary" href={profile.blog} target="_blank" rel="noopener">Blog</a>
     </div>
-    <dl class="facts">
-      {
-        profile.facts.map((f) => (
-          <div class="fact">
-            <dt class="label">{f.label}</dt>
-            <dd>{f.value}</dd>
-          </div>
-        ))
-      }
-    </dl>
+  </div>
+  <div class="art" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="blob b4"></span>
+    <span class="mtn m1"></span>
+    <span class="mtn m2"></span>
   </div>
 </section>
 
 <style>
   .hero {
-    padding-top: var(--s-lg);
-  }
-  .field {
     display: grid;
-    grid-template-columns: 1fr 260px;
-    gap: var(--s-lg);
-    padding: var(--s-lg);
-    border-radius: var(--r-md);
-    background-color: var(--c-lavender);
-    background-image:
-      linear-gradient(90deg, rgba(61, 79, 151, 0.18) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(61, 79, 151, 0.18) 1px, transparent 1px),
-      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.35), transparent 40%);
-    background-size: 24px 24px, 24px 24px, 100% 100%;
-    box-shadow: var(--bevel-plate);
-  }
-  .eyebrow {
-    color: var(--c-ink);
-    margin-bottom: var(--s-sm);
+    grid-template-columns: 7fr 5fr;
+    gap: var(--s-xxl);
+    align-items: center;
+    padding-block: var(--s-section);
   }
   h1 {
-    font-size: var(--t-display);
-    word-break: keep-all;
+    font-size: var(--t-display-xl);
+    letter-spacing: -0.035em;
+    margin-top: var(--s-sm);
   }
-  .tagline {
-    margin-top: var(--s-md);
-    font-size: var(--t-tagline);
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--c-ink);
-    word-break: keep-all;
-    max-width: 34em;
-  }
-  .go {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--s-sm);
+  .lead {
     margin-top: var(--s-lg);
-    color: var(--c-ink);
-  }
-  .facts {
-    align-self: end;
-    padding: var(--s-md);
-    border-radius: var(--r-sm);
-    background: var(--c-surface);
-    box-shadow: 0 0 0 1px var(--c-hairline);
-  }
-  .fact {
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    gap: var(--s-sm);
-    padding: var(--s-xs) 0;
-    border-bottom: 1px dotted var(--c-muted-indigo);
+    font-size: var(--t-title-md);
+    font-weight: 600;
+    color: var(--c-body-strong);
+    max-width: 30em;
     word-break: keep-all;
   }
-  .fact:last-child {
-    border-bottom: 0;
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-sm);
+    margin-top: var(--s-xl);
   }
-  dt {
-    color: var(--c-ink-soft);
-    padding-top: 1px;
+  .art {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    border-radius: var(--r-xl);
+    background: var(--c-surface-soft);
+    overflow: hidden;
   }
-  @media (max-width: 720px) {
-    .field {
+  .blob,
+  .mtn {
+    position: absolute;
+    display: block;
+  }
+  .blob {
+    border-radius: 50%;
+    box-shadow: inset -12px -14px 24px rgba(0, 0, 0, 0.12), inset 8px 10px 16px rgba(255, 255, 255, 0.45);
+  }
+  .b1 { width: 38%; aspect-ratio: 1; background: var(--c-pink); left: 8%; top: 12%; }
+  .b2 { width: 26%; aspect-ratio: 1; background: var(--c-lavender); right: 12%; top: 8%; }
+  .b3 { width: 20%; aspect-ratio: 1; background: var(--c-ochre); right: 30%; top: 40%; }
+  .b4 { width: 16%; aspect-ratio: 1; background: var(--c-mint); left: 50%; top: 22%; }
+  .mtn {
+    bottom: -6%;
+    width: 70%;
+    aspect-ratio: 1.6;
+    border-radius: 50% 50% 8px 8px;
+  }
+  .m1 { left: -10%; background: var(--c-teal); }
+  .m2 { right: -14%; width: 60%; background: var(--c-peach); }
+  @media (max-width: 768px) {
+    .hero {
       grid-template-columns: 1fr;
+      gap: var(--s-xl);
     }
   }
 </style>
