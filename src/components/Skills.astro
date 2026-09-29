@@ -4,24 +4,13 @@ import { skills } from '../data/skills';
 
 <section id="skills" class="section" aria-labelledby="skills-heading">
   <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">Skill</p>
-      <h2 id="skills-heading" class="section-title display">기술 스택</h2>
-    </div>
+    <h2 id="skills-heading" class="section-title display">Skill</h2>
     <dl>
       {
         skills.map((g) => (
-          <div class="entry">
-            <dt class="entry-side">
-              <h3>{g.group}</h3>
-            </dt>
-            <dd class="entry-main">
-              <ul class="tags">
-                {g.items.map((s) => (
-                  <li class="pill">{s}</li>
-                ))}
-              </ul>
-            </dd>
+          <div class="row">
+            <dt>{g.group}</dt>
+            <dd>{g.items.join(', ')}</dd>
           </div>
         ))
       }
@@ -30,14 +19,39 @@ import { skills } from '../data/skills';
 </section>
 
 <style>
-  .entry {
-    padding-block: var(--s-md);
+  .row {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--s-xl);
+    padding-block: var(--s-sm);
+    border-bottom: 1px solid var(--c-hairline-soft);
   }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-xs);
-    padding: 0;
-    list-style: none;
+  .row:last-child {
+    border-bottom: 0;
+  }
+  dt {
+    font-size: var(--t-caption-upper);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    padding-top: 2px;
+  }
+  dd {
+    color: var(--c-body-strong);
+    word-break: keep-all;
+  }
+  @media (max-width: 768px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: var(--s-xxs);
+    }
+  }
+  @media print {
+    .row {
+      grid-template-columns: 160px 1fr !important;
+      gap: 16px;
+      padding-block: 8px;
+    }
   }
 </style>

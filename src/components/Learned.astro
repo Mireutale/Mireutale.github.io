@@ -1,0 +1,35 @@
+---
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+const blocks = text
+  .replace(/\n\s*<br\s*\/?>\s*\n/gi, '\n\n')
+  .trim()
+  .split(/\n\s*\n/);
+const parseItem = (item: string) => {
+  const m = item.match(/^\*\*(.+?)\*\*:?\s*(.*)$/s);
+  return m ? { title: m[1], body: m[2] } : { title: null, body: item };
+};
+---
+
+{
+  blocks.map((block) =>
+    block.startsWith('- ') ? (
+      <ul>
+        {block
+          .split(/\n(?=- )/)
+          .map((item) => parseItem(item.replace(/^- /, '')))
+          .map((it) => (
+            <li>
+              {it.title && <strong>{it.title}</strong>}
+              {it.title && ': '}
+              {it.body}
+            </li>
+          ))}
+      </ul>
+    ) : (
+      <p>{block}</p>
+    ),
+  )
+}

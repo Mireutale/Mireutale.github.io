@@ -1,31 +1,470 @@
 ---
-import { projects } from '../data/projects';
-import ProjectCard from './ProjectCard.astro';
+import { getCollection, render } from 'astro:content';
+import Learned from './Learned.astro';
 
-const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'cream'] as const;
+const entries = await getCollection('projects');
+entries.sort((a, b) => a.data.period.localeCompare(b.data.period));
+const projects = await Promise.all(
+  entries.map(async (e) => ({ ...e.data, id: e.id, Content: (await render(e)).Content })),
+);
+const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
 ---
 
 <section id="projects" class="section" aria-labelledby="projects-heading">
   <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">Projects</p>
-      <h2 id="projects-heading" class="section-title display">프로젝트</h2>
+    <h2 id="projects-heading" class="section-title display">Projects</h2>
+    <p class="quote no-print">카드를 누르면 상세 내용을 볼 수 있습니다.</p>
+    <div class="carousel no-print">
+      <button class="arrow prev" type="button" aria-label="이전 프로젝트"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+      <ul class="track">
+        {
+          projects.map((p, i) => (
+            <li>
+              <button class="card" type="button" data-target={`project-${p.id}`} aria-label={`${p.name} 상세 보기`}>
+                {p.image ? (
+                  <img class="thumb" src={p.image} alt={`${p.name} 화면`} loading="lazy" />
+                ) : (
+                  <span class={`thumb tone-${tones[i % tones.length]}`} aria-hidden="true">
+                    {p.name.slice(0, 1)}
+                  </span>
+                )}
+                <span class="card-body">
+                  <span class="name">{p.name}</span>
+                  <span class="meta">
+                    <span class="pill">{p.period}</span>
+                    <span class="pill">{p.type} 프로젝트</span>
+                    {p.role && <span class="pill accent">{p.role}</span>}
+                  </span>
+                  <span class="summary">{p.summary}</span>
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+      <button class="arrow next" type="button" aria-label="다음 프로젝트"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
     </div>
-    <div class="grid">
-      {projects.map((p, i) => <ProjectCard project={p} tone={tones[i % tones.length]} />)}
+    <div class="print-only">
+      {
+        projects.map((p) => (
+          <article class="detail">
+            {p.image && <img class="detail-banner" src={p.image} alt={`${p.name} 배너`} />}
+            <p class="modal-meta">
+              {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
+            </p>
+            <h3 class="display">{p.name}</h3>
+            {p.award && <p class="award">🏆 {p.award}</p>}
+            <div class="md">
+              <h2>소개</h2>
+              <p>{p.summary}</p>
+              <p.Content />
+            </div>
+            {p.gallery && p.gallery.length > 0 && (
+              <div class="md">
+                <h2>화면</h2>
+                <ul class="gallery">
+                  {p.gallery.map((g) => (
+                    <li>
+                      <figcaption>{g.caption}</figcaption>
+                      <img src={g.src} alt={g.caption} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {p.learned && (
+              <div class="learned">
+                <h2>배운 것</h2>
+                <Learned text={p.learned} />
+              </div>
+            )}
+            {p.repo && <p class="repo-line">GitHub · {p.repo.replace(/^https?:\/\//, '')}</p>}
+          </article>
+        ))
+      }
     </div>
   </div>
+
+  {
+    projects.map((p) => (
+      <dialog class="modal" id={`project-${p.id}`} aria-labelledby={`project-${p.id}-title`}>
+        <div class="modal-body" tabindex="-1">
+        <form method="dialog">
+          <button class="close" type="submit" aria-label="닫기">×</button>
+        </form>
+        <p class="modal-meta">
+          {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
+        </p>
+        <div class="title-row">
+          <h3 id={`project-${p.id}-title`} class="display">{p.name}</h3>
+          {p.repo && (
+            <a class="btn btn-primary" href={p.repo} target="_blank" rel="noopener">GitHub →</a>
+          )}
+        </div>
+        {p.award && <p class="award">🏆 {p.award}</p>}
+        <div class="md">
+          <h2>소개</h2>
+          <p>{p.summary}</p>
+          <p.Content />
+        </div>
+        {p.gallery && p.gallery.length > 0 && (
+          <div class="md">
+            <h2>화면</h2>
+            <ul class="gallery">
+              {p.gallery.map((g) => (
+                <li>
+                  <figcaption>{g.caption}</figcaption>
+                  <img src={g.src} alt={g.caption} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {p.learned && (
+          <div class="learned">
+            <h2>배운 것</h2>
+            <Learned text={p.learned} />
+          </div>
+        )}
+        </div>
+      </dialog>
+    ))
+  }
 </section>
 
+<script>
+  const track = document.querySelector<HTMLElement>('.track');
+  const step = () => (track?.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0;
+  document.querySelector('.arrow.prev')?.addEventListener('click', () => track?.scrollBy({ left: -step(), behavior: 'smooth' }));
+  document.querySelector('.arrow.next')?.addEventListener('click', () => track?.scrollBy({ left: step(), behavior: 'smooth' }));
+
+  document.querySelectorAll<HTMLButtonElement>('.card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const dialog = document.getElementById(card.dataset.target ?? '') as HTMLDialogElement | null;
+      dialog?.showModal();
+      dialog?.querySelector<HTMLElement>('.modal-body')?.focus({ preventScroll: true });
+    });
+  });
+  document.querySelectorAll<HTMLDialogElement>('.modal').forEach((dialog) => {
+    dialog.addEventListener('close', () => {
+      (document.activeElement as HTMLElement | null)?.blur();
+    });
+  });
+
+</script>
+
 <style>
-  .grid {
+  .carousel {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-md);
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--s-sm);
   }
-  @media (max-width: 768px) {
-    .grid {
+  .arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--c-hairline);
+    background: var(--c-canvas);
+    color: var(--c-ink);
+    cursor: pointer;
+  }
+  .arrow svg {
+    display: block;
+  }
+  .arrow:hover {
+    background: var(--c-surface-soft);
+  }
+  .track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - var(--s-md) * 2) / 3);
+    gap: var(--s-md);
+    padding: var(--s-xs) 0;
+    margin: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  .track li {
+    scroll-snap-align: start;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-lg);
+    background: var(--c-canvas);
+    color: var(--c-body);
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(10, 10, 10, 0.08);
+  }
+  .thumb {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top;
+    font-size: var(--t-display-lg);
+    font-weight: 500;
+    color: var(--c-ink);
+    border-bottom: 1px solid var(--c-hairline);
+  }
+  .tone-pink { background: var(--c-pink); color: var(--c-on-primary); }
+  .tone-teal { background: var(--c-teal); color: var(--c-on-primary); }
+  .tone-lavender { background: var(--c-lavender); }
+  .tone-peach { background: var(--c-peach); }
+  .tone-ochre { background: var(--c-ochre); }
+  .tone-mint { background: var(--c-mint); }
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-sm);
+    flex: 1;
+    padding: var(--s-lg) var(--s-md);
+  }
+  .name {
+    font-size: var(--t-title-md);
+    font-weight: 600;
+    color: var(--c-ink);
+    word-break: keep-all;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-xxs);
+  }
+  .accent {
+    background: var(--c-lavender);
+  }
+  .summary {
+    flex: 1;
+    font-size: var(--t-body-sm);
+    word-break: keep-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .modal {
+    width: min(100% - var(--gutter) * 2, 720px);
+    max-height: 85vh;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--c-canvas);
+    color: var(--c-body);
+    overflow: hidden;
+  }
+  .modal-body:focus,
+  .close:focus:not(:focus-visible),
+  .card:focus:not(:focus-visible) {
+    outline: none;
+  }
+  .modal-body {
+    max-height: 85vh;
+    padding: var(--s-xl);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+  .modal::backdrop {
+    background: rgba(10, 10, 10, 0.5);
+  }
+  .modal form {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .close {
+    border: 0;
+    background: none;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--c-muted);
+    cursor: pointer;
+  }
+  .modal-meta {
+    font-size: var(--t-body-sm);
+    color: var(--c-muted);
+  }
+  .modal h3 {
+    font-size: var(--t-display-md);
+    margin-top: var(--s-xxs);
+  }
+  .award {
+    margin-top: var(--s-sm);
+    font-size: var(--t-body-sm);
+    font-weight: 600;
+    color: var(--c-body-strong);
+  }
+  .md :global(h2) {
+    margin: var(--s-lg) 0 var(--s-xs);
+    font-size: var(--t-caption-upper);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .md :global(p),
+  .md :global(li) {
+    word-break: keep-all;
+  }
+  .md :global(ul) {
+    padding-left: 1.2em;
+  }
+  .md :global(img) {
+    display: block;
+    width: 100%;
+    margin-block: var(--s-sm);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-md);
+  }
+  .md :global(li) {
+    margin-block: 6px;
+  }
+  .learned {
+    margin-top: var(--s-xl);
+    padding-top: var(--s-lg);
+    border-top: 2px solid var(--c-ink);
+  }
+  .learned h2 {
+    margin: 0 0 var(--s-xs);
+    font-size: var(--t-title-md);
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .learned :global(p),
+  .learned :global(li) {
+    word-break: keep-all;
+    color: var(--c-body-strong);
+  }
+  .learned :global(p + p),
+  .learned :global(ul + p),
+  .learned :global(p + ul) {
+    margin-top: var(--s-md);
+  }
+  .learned :global(ul) {
+    padding-left: 1.2em;
+  }
+  .learned :global(li) {
+    margin-block: 6px;
+  }
+  .title-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--s-md);
+    margin-top: var(--s-xxs);
+  }
+  .title-row h3 {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-top: 0;
+  }
+  .title-row .btn {
+    flex: none;
+    height: 30px;
+    padding: 6px 12px;
+  }
+  .detail {
+    margin-top: var(--s-lg);
+    padding: var(--s-xl);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-xl);
+    background: var(--c-canvas);
+  }
+  .detail h3 {
+    font-size: var(--t-display-md);
+    margin-top: var(--s-xxs);
+  }
+  .detail-banner {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    object-position: top;
+    margin-bottom: var(--s-md);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-md);
+    break-inside: avoid;
+  }
+  .repo-line {
+    margin-top: var(--s-md);
+    font-size: var(--t-caption);
+    color: var(--c-muted);
+  }
+  @media print {
+    .arrow {
+      display: none;
+    }
+    .detail {
+      break-inside: auto;
+      margin-top: 14px;
+      padding: 18px;
+    }
+    .detail h3 {
+      break-after: avoid;
+    }
+    .gallery li {
+      break-inside: avoid;
+    }
+    .md :global(img) {
+      max-height: 90mm;
+      width: auto;
+      max-width: 100%;
+      margin-inline: auto;
+      break-inside: avoid;
+    }
+    .gallery {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .gallery img {
+      width: 100%;
+      max-height: none;
+      margin: 0;
+    }
+    .gallery figcaption {
+      font-size: 8pt;
+    }
+  }
+  @media (max-width: 900px) {
+    .track {
+      grid-auto-columns: calc((100% - var(--s-md)) / 2);
+    }
+  }
+  @media (max-width: 600px) {
+    .carousel {
       grid-template-columns: 1fr;
+    }
+    .arrow {
+      display: none;
+    }
+    .track {
+      grid-auto-columns: 85%;
     }
   }
 </style>

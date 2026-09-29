@@ -2,86 +2,123 @@
 import { profile } from '../data/profile';
 ---
 
-<section id="top" class="hero container" aria-labelledby="hero-heading">
-  <div class="copy">
-    <p class="eyebrow">{profile.role} · {profile.nameEn}</p>
-    <h1 id="hero-heading" class="display">{profile.name}</h1>
-    <p class="lead">{profile.tagline}</p>
-    <div class="links">
-      <a class="btn btn-primary" href={`mailto:${profile.email}`}>{profile.email}</a>
-      <a class="btn btn-secondary" href={profile.github} target="_blank" rel="noopener">GitHub</a>
-      <a class="btn btn-secondary" href={profile.blog} target="_blank" rel="noopener">Blog</a>
+<header id="top" class="header container">
+  <img class="avatar" src="/img/profile/avatar.jpeg" alt={`${profile.name} 프로필 사진`} width="160" height="160" />
+  <div class="body">
+    <div class="top">
+      <div>
+        <h1 class="display">{profile.name}</h1>
+      </div>
+      <div class="contact">
+        <p>Email: <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+        <p>GitHub: <a href={profile.github} target="_blank" rel="noopener">{profile.github.replace(/^https?:\/\//, '')}</a></p>
+      </div>
     </div>
+    <div class="text">
+      {profile.about.map((p) => <p>{p}</p>)}
+    </div>
+    <ul class="traits">
+      {profile.traits.map((t) => <li>{t.text}</li>)}
+    </ul>
   </div>
-  <div class="art" aria-hidden="true">
-    <span class="blob b1"></span>
-    <span class="blob b2"></span>
-    <span class="blob b3"></span>
-    <span class="blob b4"></span>
-    <span class="mtn m1"></span>
-    <span class="mtn m2"></span>
-  </div>
-</section>
+</header>
+
 
 <style>
-  .hero {
+  .header {
     display: grid;
-    grid-template-columns: 7fr 5fr;
-    gap: var(--s-xxl);
-    align-items: center;
-    padding-block: var(--s-section);
+    grid-template-columns: 220px 1fr;
+    gap: var(--s-xl);
+    align-items: start;
+    padding-block: var(--s-section) var(--s-xxl);
+  }
+  .avatar {
+    display: block;
+    width: 160px;
+    height: 160px;
+    margin-inline: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--c-surface-card);
+  }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--s-lg);
+    margin-bottom: var(--s-xl);
   }
   h1 {
     font-size: var(--t-display-xl);
     letter-spacing: -0.035em;
-    margin-top: var(--s-sm);
   }
-  .lead {
-    margin-top: var(--s-lg);
+  .contact {
+    display: grid;
+    gap: var(--s-xxs);
+    justify-items: end;
+    text-align: right;
+    font-size: var(--t-caption);
+    color: var(--c-muted);
+  }
+  .contact a {
+    word-break: break-all;
+  }
+  .text {
+    display: grid;
+    gap: var(--s-md);
+    max-width: 40em;
+    word-break: keep-all;
+  }
+  .text p:first-child {
     font-size: var(--t-title-md);
     font-weight: 600;
     color: var(--c-body-strong);
-    max-width: 30em;
+  }
+  .traits {
+    display: grid;
+    gap: var(--s-xxs);
+    padding-left: 1.2em;
+    margin-top: var(--s-md);
+    max-width: 40em;
+    font-size: var(--t-body-sm);
     word-break: keep-all;
   }
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-sm);
-    margin-top: var(--s-xl);
-  }
-  .art {
-    position: relative;
-    aspect-ratio: 5 / 4;
-    border-radius: var(--r-xl);
-    background: var(--c-surface-soft);
-    overflow: hidden;
-  }
-  .blob,
-  .mtn {
-    position: absolute;
-    display: block;
-  }
-  .blob {
-    border-radius: 50%;
-    box-shadow: inset -12px -14px 24px rgba(0, 0, 0, 0.12), inset 8px 10px 16px rgba(255, 255, 255, 0.45);
-  }
-  .b1 { width: 38%; aspect-ratio: 1; background: var(--c-pink); left: 8%; top: 12%; }
-  .b2 { width: 26%; aspect-ratio: 1; background: var(--c-lavender); right: 12%; top: 8%; }
-  .b3 { width: 20%; aspect-ratio: 1; background: var(--c-ochre); right: 30%; top: 40%; }
-  .b4 { width: 16%; aspect-ratio: 1; background: var(--c-mint); left: 50%; top: 22%; }
-  .mtn {
-    bottom: -6%;
-    width: 70%;
-    aspect-ratio: 1.6;
-    border-radius: 50% 50% 8px 8px;
-  }
-  .m1 { left: -10%; background: var(--c-teal); }
-  .m2 { right: -14%; width: 60%; background: var(--c-peach); }
   @media (max-width: 768px) {
-    .hero {
+    .header {
       grid-template-columns: 1fr;
-      gap: var(--s-xl);
+    }
+    .contact {
+      justify-items: start;
+      text-align: left;
+    }
+  }
+  @media print {
+    .header {
+      grid-template-columns: 140px 1fr;
+      gap: 24px;
+      padding-block: 8px 24px;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+    }
+    h1 {
+      font-size: 28pt;
+    }
+    .top {
+      margin-bottom: 16px;
+    }
+    .contact {
+      justify-items: end;
+      text-align: right;
+    }
+    .text,
+    .traits {
+      max-width: none;
+    }
+    .text p:first-child {
+      font-size: 11pt;
     }
   }
 </style>

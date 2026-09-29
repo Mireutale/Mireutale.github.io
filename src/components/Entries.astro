@@ -1,29 +1,36 @@
 ---
-interface Entry {
-  org: string;
-  url?: string;
-  role: string;
-  period: string;
+interface Block {
   summary: string;
   bullets: readonly string[];
 }
 
+interface Entry extends Block {
+  org: string;
+  url?: string;
+  role: string;
+  period: string;
+  sections?: readonly Block[];
+}
+
 interface Props {
   id: string;
-  eyebrow: string;
   title: string;
   entries: readonly Entry[];
 }
 
-const { id, eyebrow, title, entries } = Astro.props;
+const { id, title, entries } = Astro.props;
+
+// "[text](url)" 조각을 링크로 렌더
+const parts = (text: string) =>
+  text.split(/(\[[^\]]+\]\([^)]+\))/).map((chunk) => {
+    const m = chunk.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    return m ? { text: m[1], url: m[2] } : { text: chunk };
+  });
 ---
 
 <section id={id} class="section" aria-labelledby={`${id}-heading`}>
   <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">{eyebrow}</p>
-      <h2 id={`${id}-heading`} class="section-title display">{title}</h2>
-    </div>
+    <h2 id={`${id}-heading`} class="section-title display">{title}</h2>
     {
       entries.map((e) => (
         <article class="entry">
@@ -38,17 +45,40 @@ const { id, eyebrow, title, entries } = Astro.props;
             <p class="period">{e.period}</p>
           </div>
           <div class="entry-main">
-            <p class="summary">{e.summary}</p>
-            {e.bullets.length > 0 && (
-              <ul>
-                {e.bullets.map((b) => (
-                  <li>{b}</li>
-                ))}
-              </ul>
-            )}
+            {
+              [e, ...(e.sections ?? [])].map((block, i) => (
+                <div class:list={['block', { later: i > 0 }]}>
+                  <p class="summary">{parts(block.summary).map((c) => (c.url ? <a href={c.url} target={c.url.startsWith('#') ? undefined : '_blank'} rel="noopener">{c.text}</a> : c.text))}</p>
+                  {block.bullets.length > 0 && (
+                    <ul>
+                      {block.bullets.map((b) => (
+                        <li>
+                          {parts(b).map((c) =>
+                            c.url ? (
+                              <a href={c.url} target={c.url.startsWith('#') ? undefined : '_blank'} rel="noopener">
+                                {c.text}
+                              </a>
+                            ) : (
+                              c.text
+                            ),
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))
+            }
           </div>
         </article>
       ))
     }
+    <slot />
   </div>
 </section>
+
+<style>
+  .later {
+    margin-top: var(--s-md);
+  }
+</style>
