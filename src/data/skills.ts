@@ -3,6 +3,6 @@ export const skills = [
   { group: 'Backend', items: ['Spring Boot', 'Spring Security', 'JPA', 'FastAPI', 'REST API', 'JWT'] },
   { group: 'Frontend', items: ['React', 'Next.js'] },
   { group: 'Database', items: ['MySQL', 'PostgreSQL'] },
-  { group: 'Infra', items: ['AWS', 'Docker', 'Docker Compose', 'Nginx', 'Linux'] },
-  { group: 'Tools', items: ['Git', 'GitHub', 'Notion', 'Discord'] },
+  { group: 'Infra', items: ['AWS', 'Docker', 'Docker Compose', 'Kubernetes', 'Kafka', 'Nginx', 'Linux'] },
+  { group: 'Tools', items: ['Git', 'GitHub', 'k6', 'Notion', 'Discord'] },
 ] as const;

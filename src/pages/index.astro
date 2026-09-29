@@ -1,26 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
-import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
 import Entries from '../components/Entries.astro';
 import Projects from '../components/Projects.astro';
 import Skills from '../components/Skills.astro';
 import Awards from '../components/Awards.astro';
-import Footer from '../components/Footer.astro';
 import { profile } from '../data/profile';
 ---
 
-<Base title={`${profile.name} · ${profile.role}`} description={profile.tagline}>
-  <Nav />
+<Base title={`${profile.name}의 포트폴리오`} description={profile.tagline}>
+  <Hero />
   <main>
-    <Hero />
-    <About />
-    <Entries id="experience" eyebrow="Experience" title="경력" entries={profile.experience} />
     <Projects />
+    <Entries id="experience" title="경험 및 수상" entries={[...profile.education, ...profile.experience].sort((a, b) => a.period.localeCompare(b.period))}>
+      <Awards />
+    </Entries>
     <Skills />
-    <Entries id="education" eyebrow="Education" title="학력 및 자격" entries={profile.education} />
-    <Awards />
   </main>
-  <Footer />
 </Base>

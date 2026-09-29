@@ -20,17 +20,19 @@
   --c-ochre: #e8b94a;
   --c-mint: #a4d4c5;
   --c-coral: #ff6b5a;
+  --c-link: #1d4ed8;
+  --c-link-hover: #1e40af;
 
   --font: 'Inter', 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  --t-display-xl: clamp(40px, 2rem + 3.5vw, 72px);
+  --t-display-xl: clamp(36px, 2rem + 2vw, 52px);
   --t-display-lg: clamp(32px, 1.5rem + 2.5vw, 56px);
-  --t-display-md: clamp(28px, 1.4rem + 1.5vw, 40px);
+  --t-display-md: clamp(24px, 1.2rem + 1vw, 32px);
   --t-display-sm: 32px;
-  --t-title-lg: 24px;
-  --t-title-md: 18px;
+  --t-title-lg: 20px;
+  --t-title-md: 17px;
   --t-title-sm: 16px;
-  --t-body-md: 16px;
+  --t-body-md: 15px;
   --t-body-sm: 14px;
   --t-caption: 13px;
   --t-caption-upper: 12px;
@@ -49,8 +51,8 @@
   --s-lg: 24px;
   --s-xl: 32px;
   --s-xxl: 48px;
-  --s-section: clamp(64px, 4rem + 2vw, 96px);
+  --s-section: clamp(40px, 2.5rem + 1vw, 64px);
 
-  --container: 1120px;
-  --gutter: clamp(16px, 2vw, 32px);
+  --container: 1040px;
+  --gutter: clamp(20px, 6vw, 96px);
 }
