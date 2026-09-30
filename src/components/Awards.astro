@@ -2,6 +2,10 @@
 import { profile } from '../data/profile';
 ---
 
+<section id="awards" class="section" aria-labelledby="awards-heading">
+  <div class="container">
+    <h2 id="awards-heading" class="section-title display">수상 및 자격증</h2>
+
 <div class="entry">
   <div class="entry-side">
     <h3>수상</h3>
@@ -12,7 +16,7 @@ import { profile } from '../data/profile';
         profile.awards.map((a) => (
           <li>
             <span class="date">{a.date} </span>
-            {a.title} · {a.org} · 팀 {a.team}
+            {a.title} · {a.org}{'team' in a && a.team && ` · 팀 ${a.team}`}
           </li>
         ))
       }
@@ -38,6 +42,9 @@ import { profile } from '../data/profile';
     </ul>
   </div>
 </div>
+
+  </div>
+</section>
 
 <style>
   .date {

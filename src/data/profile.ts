@@ -74,18 +74,19 @@ export const profile = {
       role: '정보컴퓨터공학 학사',
       period: '2020.02 ~ 2026.02',
       summary: '교내 학술 보안동아리 [KEEPER](https://keeper.or.kr/) 활동',
-      bullets: [
-        'KEEPER 14기 (2022.08 ~ 2026.02)',
-        '15.5기(2024년 2학기)·16기(2025년 1학기) 멘토로 신입 회원 학습 지원',
-        '학술부장 (2024.08 ~ 2025.08)',
-      ],
+      bullets: ['14기 (2022.08 ~ 2026.02)'],
       sections: [
+        {
+          summary: 'KEEPER 멘토 · 학술부장 (2024.08 ~ 2025.08)',
+          bullets: [
+            '15.5기·16기 멘토 · 신입 회원 학습 지원',
+            '학술부장 · 동아리원 전체 학습 관련 업무 담당 및 스터디 관리',
+          ],
+        },
         {
           summary: '교내 성과 및 활동',
           bullets: [
             '2025 K-ICT in Busan 부산대학교 대표 참가 (2025.07)',
-            '졸업과제 SW/AI 분과 금상 (1위) · 팀 Pilltip (2025.10)',
-            'SW중심대학 마일스톤 장학생, SW전문인재S 선정 (2025.10)',
             'SK AI SUMMIT 2025 부산대학교 대표 참가 (2025.11)',
           ],
         },
@@ -96,6 +97,8 @@ export const profile = {
     { date: '2025.08', title: 'SW중심대학 디지털 경진대회 SW부문 후원기업상', org: 'SW중심대학협의회', team: 'Pilltip' },
     { date: '2025.09', title: 'Google.org AI 커리어스쿨 창업톤 L:AUNCH 장려상 (3위)', org: 'Google.org', team: 'Pilltip' },
     { date: '2025.09', title: '부산 데이터 위크 2025 데이터활용 우수사례 최우수상 (1위)', org: '부산광역시', team: 'Pilltip' },
+    { date: '2025.10', title: '부산대학교 졸업과제 SW/AI 분과 금상 (1위)', org: '부산대학교', team: 'Pilltip' },
+    { date: '2025.10', title: 'SW중심대학 마일스톤 장학생 · SW전문인재S 선정', org: '부산대학교' },
   ],
   certifications: [
     { date: '2025.05', title: 'TOPCIT', org: '정보통신기획평가원', grade: 'Level 3 (557점)' },
