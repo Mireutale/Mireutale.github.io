@@ -11,10 +11,9 @@ import { profile } from '../data/profile';
 <Base title={`${profile.name}의 포트폴리오`} description={profile.tagline}>
   <Hero />
   <main>
+    <Entries id="experience" title="경험" entries={[...profile.education, ...profile.experience].sort((a, b) => a.period.localeCompare(b.period))} />
     <Projects />
-    <Entries id="experience" title="경험 및 수상" entries={[...profile.education, ...profile.experience].sort((a, b) => a.period.localeCompare(b.period))}>
-      <Awards />
-    </Entries>
+    <Awards />
     <Skills />
   </main>
 </Base>
