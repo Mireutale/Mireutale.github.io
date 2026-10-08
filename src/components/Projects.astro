@@ -287,7 +287,25 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
     padding: var(--s-xl);
     overflow-y: auto;
     overscroll-behavior: contain;
-    scrollbar-gutter: stable;
+  }
+  /* 트랙 박스 없이 모달 가장자리에서 thumb만 보이게. 둥근 모서리 밖으로 나가지 않도록 위아래 범위를 radius만큼 줄임 */
+  .modal-body::-webkit-scrollbar {
+    width: 10px;
+  }
+  .modal-body::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: var(--r-xl);
+  }
+  .modal-body::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: var(--r-pill);
+    background: var(--c-muted-soft) padding-box;
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    .modal-body {
+      scrollbar-width: thin;
+      scrollbar-color: var(--c-muted-soft) transparent;
+    }
   }
   .modal::backdrop {
     background: rgba(10, 10, 10, 0.5);
