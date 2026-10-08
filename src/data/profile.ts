@@ -53,6 +53,7 @@ export const profile = {
       bullets: [
         'AWS EKS 기반 MSA 아키텍처 설계 및 CI/CD·모니터링 구축',
         'Next.js 프론트엔드 개발, 팀 일정·배포 관리',
+        'AI Native 개발 환경 구성 (팀 개발 규칙 문서화 · 공용 스킬 작성)',
         '자세한 내용은 [Projects](#projects) 참고',
       ],
     },
