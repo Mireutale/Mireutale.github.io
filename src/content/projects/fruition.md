@@ -20,7 +20,7 @@ learned: |
   - **넓은 MVP vs 핵심 기능 2개**: 처음에는 프로젝트에서 원하는 모든 내용을 정리하고 기획에 추가했으나, 기획심의 의견을 받아 LLM Wiki 생성과 자연어 검색으로 범위를 좁히고 나머지는 후순위 마일스톤으로 돌렸습니다. POC를 어느 정도 증명한 뒤에야 구체적인 프로젝트의 방향성이 잡히게 되었고 후순위 마일스톤에서도 우선순위를 정리할 수 있었습니다.
   - **문서 규칙 파일 vs LLM 편집 보조**: 안드레 카파시가 제안한 LLM Wiki의 Schema는 사용자가 규칙 파일을 직접 작성하고 유지하는 기능이었습니다. 하지만 스키마를 매번 직접 관리하고 사용하는 것은 개발자가 아닌 사용자에게 부담이었고, 검증되지 않은 가정이었습니다. 따라서 일부 사용자에게 이 기능에 대한 유지보수성이 의미가 있는지를 확인하였고, 소통 결과 유지보수가 복잡하다는 점을 고려하여 편집기 안에서 LLM이 편집을 돕는 기능으로 바꿨습니다.
   - **AI 작업 자동 실행 vs 승인**: 모든 작업에 승인을 받으면 LLM의 할루시네이션을 검증할 수 있어 안전하지만 쓰기 불편하고, 모두 자동으로 돌리면 LLM의 자율성이 너무 높아져 신뢰가 무너집니다. 위험도에 따라 자동 실행, 사후 검토, 사전 승인 세 단계로 나누고, 모든 작업을 append-only 로그와 스냅샷 롤백으로 되돌릴 수 있게 했습니다.
-  - **비용 vs 가용성**: NAT 게이트웨이 1대, RDS single-AZ, AI 워커 스팟 노드로 월 비용을 400~650달러 예산 안에 묶었습니다. 가용성은 낮아지므로 SLA가 필요한 단계에서 Multi-AZ로 올리는 것을 후속 과제로 남겼습니다. 유휴 시 노드그룹을 0으로 줄이는 것도 비용적 측면을 고려하여 배포 시스템을 구성하였습니다.
+  - **비용 vs 가용성**: 모든 구성을 이중화하면 안정적이지만 월 예산 400~650달러를 넘기게 되어, 장애 시 영향이 큰 곳과 그렇지 않은 곳을 나눠 판단했습니다. 로그인이 막히면 서비스 전체를 쓸 수 없기 때문에 인증 DB는 Multi-AZ로, 인증·권한 캐시를 담당하는 Redis는 자동 장애조치가 되는 2노드로 구성했습니다. 반면 문서·AI 코어 DB는 아직 테스트 단계라 데이터가 사라져도 문제가 없어 Single-AZ로 두고, 실제 사용자 데이터를 다루는 단계에서 Multi-AZ로 올리기로 했습니다. NAT 게이트웨이는 1대, AI 워커는 스팟 노드로 비용을 줄였고, 사용하지 않는 기간에는 노드그룹을 0대로 내리는 절전 기능을 만들었습니다. 화면은 Fargate에 따로 두어 사용자가 접속하면 자동으로 노드를 다시 띄우도록 해, 비용을 아끼면서도 서비스가 멈춘 것처럼 보이지 않게 했습니다.
 
 ---
 
@@ -40,12 +40,14 @@ learned: |
 
 ![Fruition AWS 인프라 구성도](/img/fruition/architecture.png)
 
-- **아키텍처**: AWS ap-northeast-2, VPC(가용영역 2개) 안 EKS 1.35 프라이빗 클러스터에 도메인별 namespace로 분리한 MSA. 인증·워크스페이스·권한(access-svc :8081)과 문서·채팅·Wiki·AI 게이트웨이(document-svc :8080)를 별도 서비스·별도 RDS(PostgreSQL 16)로 두고, AI 파이프라인(pipeline-api, ingest-worker, converter)은 Kafka(Strimzi) 토픽으로 비동기 연결.
-- **노드 구성**: general 노드그룹은 t3.large 온디맨드 2~4대, AI 워커는 스팟 0~2대. KEDA로 워커 자동 확장. EventBridge가 1분마다 Lambda를 돌려 ALB 요청이 없으면 노드그룹을 0으로 축소(DynamoDB에 상태 기록).
-- **네트워크·보안**: 사용자 → Vercel(Next.js) → WAF(SQLi·악성 입력·IP당 5분 600건 제한) → ALB(TLS 종료, host 기반 라우팅)가 유일한 인바운드. 외부 LLM·이미지 풀은 NAT 게이트웨이 1대로 아웃바운드만. RDS·Redis는 TLS + 서비스별 계정, 보안그룹은 EKS 노드에서만 허용. 파드는 IRSA로 S3 접근, VPC 엔드포인트로 인터넷 경유 없이 전송.
-- **시크릿·IaC**: Secrets Manager(DB 비밀번호·JWT 키, KMS 암호화) → External Secrets Operator가 쿠버네티스 시크릿으로 동기화. Route 53·ACM·VPC 등은 Terraform으로 관리.
-- **CI/CD**: GitHub Actions가 OIDC로 AWS IAM 롤 인수(장기 자격증명 없음). main 브랜치는 ECR에 이미지 푸시(태그 불변, 푸시 시 취약점 스캔), feedback 환경은 프라이빗 서브넷의 자체 호스팅 러너에서 kustomize로 SHA 기준 rolling update.
-- **운영·비용**: CloudWatch가 컨테이너 로그·메트릭 수집(Fluent Bit), 파드·노드 CPU·메모리·RDS·Redis·WAF 차단 알람 → SNS → Lambda → Discord 웹훅. 전송 실패는 SQS 큐에 보관. AWS 예산 월 400/550/650달러 초과 시 같은 경로로 알림.
+- **아키텍처**: AWS ap-northeast-2, VPC(가용영역 2개) 안 EKS 1.35 프라이빗 클러스터에 도메인별 namespace로 분리한 MSA. 인증·워크스페이스·권한(access-svc :8081)과 문서·채팅·Wiki·AI 게이트웨이(document-svc :8080)를 별도 서비스·별도 RDS(PostgreSQL 16)로 두고, AI 파이프라인(pipeline-api, ingest·query·agent 워커, converter, edit-event-consumer, pipeline-agent-worker, BGE-M3 embedding-server)은 Kafka(Strimzi, mTLS) 토픽으로 비동기 연결. 프론트엔드(Next.js)는 같은 클러스터의 Fargate 프로필에 Pod 2개로 배포.
+- **노드 구성**: general 노드그룹은 t3.large 온디맨드 2~5대(평소 2~4대, 5번째는 배포 중에만), AI 워커는 m5·m6i·m7i xlarge 스팟 0~4대(taint로 AI 워크로드만 배치). 서비스는 HPA, 워커는 KEDA로 확장하고 노드는 태그 범위로 권한을 제한한 Cluster Autoscaler가 조정.
+- **절전·기동**: 운영자가 실행 중인 작업이 없음을 확인하고 절전을 걸면 두 노드그룹을 0대로 줄이고 ASG Launch를 멈춰 노드가 다시 뜨지 않게 함. 화면은 Fargate라 절전 중에도 응답하고, 로그인 전에 EventBridge로 기동 이벤트를 보내면 request-wake Lambda가 general 2대·AI 1대로 깨움. 1분마다 ALB 5XX를 확인하는 감지는 예비 경로. 상태는 DynamoDB에 먼저 기록해 중간에 실패해도 다음 실행에서 이어서 복구. 화면 권한으로는 기동 이벤트만 보낼 수 있어 탈취돼도 절전을 조작할 수 없음.
+- **네트워크·보안**: 사용자 → WAF → ALB(TLS 종료, HTTP는 443으로 리다이렉트, 경로·호스트 기반 라우팅)가 유일한 인바운드. WAF는 AWS 관리형 규칙(IP 평판·공통·알려진 악성 입력·SQLi), 내부 경로(/internal·Swagger) 차단, 접근 코드 검사, IP당 5분 3,000건·/api/ 전체 5분 6,000건 제한. 외부 LLM·이미지 풀은 NAT 게이트웨이 1대로 아웃바운드만. EKS API는 프라이빗 전용이고 배포 러너에서만 443 접근 허용. VPC Flow Log 기록.
+- **데이터**: 인증 DB는 Multi-AZ, 문서·AI DB를 담은 코어 DB는 비용을 위해 Single-AZ(둘 다 SSL 강제, 암호화, 7일 백업, 삭제 보호). Redis 7.1은 2노드 Multi-AZ 자동 장애조치, TLS 필수, 기본 사용자를 끄고 서비스별 ACL 계정으로 접근 키·명령 제한. S3는 KMS CMK 암호화·버전 관리·TLS 전용이고, 파드는 IRSA로 서비스별 경로 단위 권한만 받아 게이트웨이 엔드포인트로 전송(tmp/는 7일 후 정리).
+- **시크릿·IaC**: Secrets Manager(DB 계정·Redis·JWT 키, KMS 암호화) → External Secrets Operator가 쿠버네티스 시크릿으로 동기화. VPC·EKS·RDS·WAF 등 AWS 리소스는 Terraform으로 관리하고, ACM 인증서와 DNS(외부 Dynu)는 Terraform 밖에서 연결.
+- **CI/CD**: GitHub Actions가 OIDC로 AWS IAM 롤 인수(장기 자격증명 없음). 이미지 게시 롤은 main 브랜치에서만, 배포 롤은 feedback Environment에서만 인수 가능. main 브랜치는 ECR 저장소 5개에 이미지 푸시(태그 불변, 푸시 시 취약점 스캔, 최근 60개 보관), feedback 환경은 프라이빗 서브넷의 자체 호스팅 러너(t3.small, SSM 접속)에서 kustomize로 SHA 기준 rolling update.
+- **운영·비용**: CloudWatch가 컨테이너 로그(14일 보관)·메트릭 수집(Fluent Bit). 파드·노드 CPU·메모리, 실패 노드·지표 누락, RDS CPU·저장 공간, Redis 메모리, ALB 5XX·지연·요청 수, WAF 차단, NAT 송신량 알람 → SNS → Lambda → Discord 웹훅. 전송 실패는 SQS 큐에 보관하고 이것도 알람. AWS 예산 월 400/550/650달러 초과 시 같은 경로로 알림.
 - **프론트엔드**: 디자이너와 화면 구조·사용자 흐름을 협의해 UI/UX 구현. Next.js·React·TypeScript. 도메인과 기능별 책임을 나누고 API 통신·상태 관리·UI 컴포넌트를 독립적으로 확장할 수 있는 계층형 구조. GFM 마크다운 편집기, 지식 그래프 뷰, 채팅 결과를 골라 Wiki에 편입하는 흐름.
 - **신뢰성 설계**: 원문은 불변 저장, Wiki 항목마다 원문 근거 연결. AI 작업은 위험도에 따라 자동 실행 / 사후 검토 / 사전 승인으로 구분. 모든 작업은 append-only 로그로 남기고 스냅샷·diff 기반 원 클릭 롤백. 복원도 삭제가 아니라 새 기록으로 저장.
 
