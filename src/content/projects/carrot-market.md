@@ -1,6 +1,6 @@
 ---
 name: "당근마켓 클론코딩"
-period: "2024.11 ~ 2025.02"
+period: "2025.02"
 type: "팀"
 role: "기획 · 설계 · 백엔드"
 summary: "PNU Mini Bootcamp. 당근마켓 API를 리버싱해 FastAPI로 백엔드를 구현하고 React 프론트와 연결했습니다."
