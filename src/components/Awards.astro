@@ -1,5 +1,5 @@
 ---
-import { profile } from '../data/profile';
+import { awards, certifications } from '../lib/profile';
 ---
 
 <section id="awards" class="section" aria-labelledby="awards-heading">
@@ -13,10 +13,10 @@ import { profile } from '../data/profile';
   <div class="entry-main">
     <ul>
       {
-        profile.awards.map((a) => (
+        awards.map((a) => (
           <li>
             <span class="date">{a.date} </span>
-            {a.title} · {a.org}{'team' in a && a.team && ` · 팀 ${a.team}`}
+            {a.title} · {a.org}{a.team && ` · 팀 ${a.team}`}
           </li>
         ))
       }
@@ -31,11 +31,11 @@ import { profile } from '../data/profile';
   <div class="entry-main">
     <ul>
       {
-        profile.certifications.map((c) => (
+        certifications.map((c) => (
           <li>
             <span class="date">{c.date} </span>
             {c.title}
-            {'grade' in c && c.grade && ` ${c.grade}`} · {c.org}
+            {c.grade && ` ${c.grade}`} · {c.org}
           </li>
         ))
       }

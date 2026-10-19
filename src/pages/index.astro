@@ -5,13 +5,16 @@ import Entries from '../components/Entries.astro';
 import Projects from '../components/Projects.astro';
 import Skills from '../components/Skills.astro';
 import Awards from '../components/Awards.astro';
-import { profile } from '../data/profile';
+import { getEntry } from 'astro:content';
+import { experience } from '../lib/profile';
+
+const intro = (await getEntry('profile', 'intro'))!.data;
 ---
 
-<Base title={`${profile.name}의 포트폴리오`} description={profile.tagline}>
+<Base title={`${intro.name}의 포트폴리오`} description={intro.description}>
   <Hero />
   <main>
-    <Entries id="experience" title="경험" entries={[...profile.education, ...profile.experience].sort((a, b) => a.period.localeCompare(b.period))} />
+    <Entries id="experience" title="경험" entries={experience} />
     <Projects />
     <Awards />
     <Skills />

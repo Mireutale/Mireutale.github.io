@@ -1,0 +1,258 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Learned from './Learned.astro';
+
+// 모달·인쇄·풀 페이지가 공유하는 프로젝트 상세
+interface Props {
+  project: CollectionEntry<'projects'>['data'] & { id: string; Content: any };
+  variant: 'modal' | 'print' | 'page';
+}
+
+const { project: p, variant } = Astro.props;
+const Title = variant === 'page' ? 'h1' : 'h3';
+const showBanner = !!p.image;
+---
+
+<div class="detail-head">
+{showBanner && <img class="detail-banner" src={p.image} alt={`${p.name} 배너`} />}
+<div class="head-info">
+<p class="modal-meta">
+  {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
+</p>
+<div class="title-row">
+  <Title id={variant === 'modal' ? `project-${p.id}-title` : undefined} class="title display">{p.name}</Title>
+  {variant !== 'print' && p.repo && (
+    <a class="btn btn-primary" href={p.repo} target="_blank" rel="noopener">GitHub →</a>
+  )}
+  </div>
+{p.award && <p class="award">🏆 {p.award}</p>}
+{p.highlights && p.highlights.length > 0 && (
+  <dl class="highlights">
+    {p.highlights.map((h) => (
+      <div>
+        <dt>{h.label}</dt>
+        <dd>{h.value}</dd>
+      </div>
+    ))}
+  </dl>
+)}
+{p.stack && p.stack.length > 0 && (
+  <ul class="stack" aria-label="기술 스택">
+    {p.stack.map((s) => <li class="pill">{s}</li>)}
+  </ul>
+)}
+</div>
+</div>
+<div class="md">
+  <h2>소개</h2>
+  <p>{p.summary}</p>
+  <p.Content />
+</div>
+{p.gallery && p.gallery.length > 0 && (
+  <div class="md">
+    <h2>화면</h2>
+    <ul class="gallery">
+      {p.gallery.map((g) => (
+        <li>
+          <figcaption>{g.caption}</figcaption>
+          <img src={g.src} alt={g.caption} loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+{p.learned && (
+  <div class="learned">
+    <h2>배운 것</h2>
+    <Learned text={p.learned} />
+  </div>
+)}
+{variant === 'print' && p.repo && <p class="repo-line">GitHub · {p.repo.replace(/^https?:\/\//, '')}</p>}
+
+<style>
+  .modal-meta {
+    font-size: var(--t-body-sm);
+    color: var(--c-muted);
+  }
+  .title {
+    font-size: var(--t-display-md);
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-top: 0;
+  }
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-xs) var(--s-md);
+    margin-top: var(--s-xxs);
+  }
+  .title-row .btn {
+    flex: none;
+    height: 30px;
+    padding: 6px 12px;
+  }
+  .award {
+    margin-top: var(--s-sm);
+    font-size: var(--t-body-sm);
+    font-weight: 600;
+    color: var(--c-body-strong);
+  }
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--s-xs);
+    margin: var(--s-md) 0 0;
+  }
+  .highlights div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+    padding: var(--s-sm) var(--s-md);
+    border-radius: var(--r-md);
+    background: var(--c-surface-card);
+  }
+  .highlights dd {
+    margin: 0;
+    font-size: var(--t-title-lg);
+    font-weight: 600;
+    color: var(--c-ink);
+    letter-spacing: -0.01em;
+  }
+  .highlights dt {
+    font-size: var(--t-caption);
+    color: var(--c-muted);
+    word-break: keep-all;
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-xxs);
+    margin: var(--s-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stack .pill {
+    background: var(--c-canvas);
+    border: 1px solid var(--c-hairline);
+  }
+  .md :global(h2) {
+    margin: var(--s-lg) 0 var(--s-xs);
+    font-size: var(--t-caption-upper);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .md :global(p),
+  .md :global(li) {
+    word-break: keep-all;
+  }
+  .md :global(ul) {
+    padding-left: 1.2em;
+  }
+  .md :global(img) {
+    display: block;
+    width: 100%;
+    margin-block: var(--s-sm);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-md);
+  }
+  .md :global(li) {
+    margin-block: 6px;
+  }
+  .md :global(table) {
+    width: 100%;
+    margin-block: var(--s-sm);
+    border-collapse: collapse;
+    font-size: var(--t-body-sm);
+  }
+  .md :global(th),
+  .md :global(td) {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--c-hairline);
+    text-align: left;
+    word-break: keep-all;
+  }
+  .md :global(th) {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .learned {
+    margin-top: var(--s-xl);
+    padding-top: var(--s-lg);
+    border-top: 2px solid var(--c-ink);
+  }
+  .learned h2 {
+    margin: 0 0 var(--s-xs);
+    font-size: var(--t-title-md);
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .learned :global(p),
+  .learned :global(li) {
+    word-break: keep-all;
+    color: var(--c-body-strong);
+  }
+  .learned :global(p + p),
+  .learned :global(ul + p),
+  .learned :global(p + ul) {
+    margin-top: var(--s-md);
+  }
+  .learned :global(ul) {
+    padding-left: 1.2em;
+  }
+  .learned :global(li) {
+    margin-block: 6px;
+  }
+  .detail-banner {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    object-position: top;
+    margin-bottom: var(--s-md);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-md);
+    break-inside: avoid;
+  }
+  .repo-line {
+    margin-top: var(--s-md);
+    font-size: var(--t-caption);
+    color: var(--c-muted);
+  }
+  @media print {
+    .title {
+      break-after: avoid;
+    }
+    .highlights div {
+      padding: 6px 10px;
+    }
+    .highlights dd {
+      font-size: 12pt;
+    }
+    .gallery li {
+      break-inside: avoid;
+    }
+    .md :global(img) {
+      max-height: 90mm;
+      width: auto;
+      max-width: 100%;
+      margin-inline: auto;
+      break-inside: avoid;
+    }
+    .gallery {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .gallery img {
+      width: 100%;
+      max-height: none;
+      margin: 0;
+    }
+    .gallery figcaption {
+      font-size: 8pt;
+    }
+  }
+</style>

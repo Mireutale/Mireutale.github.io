@@ -14,7 +14,21 @@ const projects = defineCollection({
     image: z.string().optional(),
     gallery: z.array(z.object({ src: z.string(), caption: z.string() })).optional(),
     learned: z.string().optional(),
+    highlights: z.array(z.object({ value: z.string(), label: z.string() })).max(3).optional(),
+    stack: z.array(z.string()).optional(),
+    featured: z.boolean().optional(),
   }),
 });
 
-export const collections = { projects };
+// 상단 소개. src/content/profile/intro.md 하나만 고치면 반영됨
+const profile = defineCollection({
+  loader: glob({ pattern: 'intro.md', base: './src/content/profile' }),
+  schema: z.object({
+    name: z.string(),
+    email: z.string().email(),
+    github: z.string().url(),
+    description: z.string(),
+  }),
+});
+
+export const collections = { projects, profile };

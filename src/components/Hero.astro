@@ -1,5 +1,9 @@
 ---
-import { profile } from '../data/profile';
+import { getEntry, render } from 'astro:content';
+
+const intro = (await getEntry('profile', 'intro'))!;
+const { Content } = await render(intro);
+const profile = intro.data;
 ---
 
 <header id="top" class="header container">
@@ -15,11 +19,8 @@ import { profile } from '../data/profile';
       </div>
     </div>
     <div class="text">
-      {profile.about.map((p) => <p>{p}</p>)}
+      <Content />
     </div>
-    <ul class="traits">
-      {profile.traits.map((t) => <li>{t.text}</li>)}
-    </ul>
   </div>
 </header>
 
@@ -70,19 +71,18 @@ import { profile } from '../data/profile';
     max-width: 40em;
     word-break: keep-all;
   }
-  .text p:first-child {
+  .text :global(p:first-child) {
     font-size: var(--t-title-md);
     font-weight: 600;
     color: var(--c-body-strong);
   }
-  .traits {
+  /* 본문 끝의 목록 = 성향 */
+  .text :global(ul) {
     display: grid;
     gap: var(--s-xxs);
+    margin: 0;
     padding-left: 1.2em;
-    margin-top: var(--s-md);
-    max-width: 40em;
     font-size: var(--t-body-sm);
-    word-break: keep-all;
   }
   @media (max-width: 768px) {
     .header {
@@ -113,11 +113,10 @@ import { profile } from '../data/profile';
       justify-items: end;
       text-align: right;
     }
-    .text,
-    .traits {
+    .text {
       max-width: none;
     }
-    .text p:first-child {
+    .text :global(p:first-child) {
       font-size: 11pt;
     }
   }

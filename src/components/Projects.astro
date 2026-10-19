@@ -1,84 +1,45 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Learned from './Learned.astro';
+import ProjectDetail from './ProjectDetail.astro';
 
 const entries = await getCollection('projects');
-entries.sort((a, b) => a.data.period.localeCompare(b.data.period));
+// 주요 프로젝트 먼저, 그 안에서는 최신순
+entries.sort((a, b) => Number(!!b.data.featured) - Number(!!a.data.featured) || b.data.period.localeCompare(a.data.period));
 const projects = await Promise.all(
   entries.map(async (e) => ({ ...e.data, id: e.id, Content: (await render(e)).Content })),
 );
-const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
 ---
 
 <section id="projects" class="section" aria-labelledby="projects-heading">
   <div class="container">
     <h2 id="projects-heading" class="section-title display">Projects</h2>
     <p class="quote no-print">카드를 누르면 상세 내용을 볼 수 있습니다.</p>
-    <div class="carousel no-print">
-      <button class="arrow prev" type="button" aria-label="이전 프로젝트"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
-      <ul class="track">
-        {
-          projects.map((p, i) => (
-            <li>
-              <button class="card" type="button" data-target={`project-${p.id}`} aria-label={`${p.name} 상세 보기`}>
-                {p.image ? (
-                  <img class="thumb" src={p.image} alt={`${p.name} 화면`} loading="lazy" />
-                ) : (
-                  <span class={`thumb tone-${tones[i % tones.length]}`} aria-hidden="true">
-                    {p.name.slice(0, 1)}
-                  </span>
-                )}
-                <span class="card-body">
-                  <span class="name">{p.name}</span>
-                  <span class="meta">
-                    <span class="pill">{p.period}</span>
-                    <span class="pill">{p.type} 프로젝트</span>
-                    {p.role && <span class="pill accent">{p.role}</span>}
-                  </span>
-                  <span class="summary">{p.summary}</span>
+    <ul class="grid no-print">
+      {
+        projects.map((p) => (
+          <li class:list={[{ featured: p.featured }]}>
+            <button class="card" type="button" data-target={`project-${p.id}`} aria-label={`${p.name} 상세 보기`}>
+              {p.image && <img class="thumb" src={p.image} alt={`${p.name} 화면`} loading="lazy" />}
+              <span class="card-body">
+                <span class="name">{p.name}</span>
+                <span class="meta">
+                  <span class="pill">{p.period}</span>
+                  <span class="pill">{p.type} 프로젝트</span>
+                  {p.role && <span class="pill accent">{p.role}</span>}
                 </span>
-              </button>
-            </li>
-          ))
-        }
-      </ul>
-      <button class="arrow next" type="button" aria-label="다음 프로젝트"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
-    </div>
+                <span class="summary">{p.summary}</span>
+                {p.stack && <span class="stack-line">{p.stack.join(' · ')}</span>}
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
     <div class="print-only">
       {
         projects.map((p) => (
           <article class="detail">
-            {p.image && <img class="detail-banner" src={p.image} alt={`${p.name} 배너`} />}
-            <p class="modal-meta">
-              {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
-            </p>
-            <h3 class="display">{p.name}</h3>
-            {p.award && <p class="award">🏆 {p.award}</p>}
-            <div class="md">
-              <h2>소개</h2>
-              <p>{p.summary}</p>
-              <p.Content />
-            </div>
-            {p.gallery && p.gallery.length > 0 && (
-              <div class="md">
-                <h2>화면</h2>
-                <ul class="gallery">
-                  {p.gallery.map((g) => (
-                    <li>
-                      <figcaption>{g.caption}</figcaption>
-                      <img src={g.src} alt={g.caption} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {p.learned && (
-              <div class="learned">
-                <h2>배운 것</h2>
-                <Learned text={p.learned} />
-              </div>
-            )}
-            {p.repo && <p class="repo-line">GitHub · {p.repo.replace(/^https?:\/\//, '')}</p>}
+            <ProjectDetail project={p} variant="print" />
           </article>
         ))
       }
@@ -92,40 +53,7 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
         <form method="dialog">
           <button class="close" type="submit" aria-label="닫기">×</button>
         </form>
-        <p class="modal-meta">
-          {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
-        </p>
-        <div class="title-row">
-          <h3 id={`project-${p.id}-title`} class="display">{p.name}</h3>
-          {p.repo && (
-            <a class="btn btn-primary" href={p.repo} target="_blank" rel="noopener">GitHub →</a>
-          )}
-        </div>
-        {p.award && <p class="award">🏆 {p.award}</p>}
-        <div class="md">
-          <h2>소개</h2>
-          <p>{p.summary}</p>
-          <p.Content />
-        </div>
-        {p.gallery && p.gallery.length > 0 && (
-          <div class="md">
-            <h2>화면</h2>
-            <ul class="gallery">
-              {p.gallery.map((g) => (
-                <li>
-                  <figcaption>{g.caption}</figcaption>
-                  <img src={g.src} alt={g.caption} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {p.learned && (
-          <div class="learned">
-            <h2>배운 것</h2>
-            <Learned text={p.learned} />
-          </div>
-        )}
+        <ProjectDetail project={p} variant="modal" />
         </div>
       </dialog>
     ))
@@ -133,11 +61,6 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
 </section>
 
 <script>
-  const track = document.querySelector<HTMLElement>('.track');
-  const step = () => (track?.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0;
-  document.querySelector('.arrow.prev')?.addEventListener('click', () => track?.scrollBy({ left: -step(), behavior: 'smooth' }));
-  document.querySelector('.arrow.next')?.addEventListener('click', () => track?.scrollBy({ left: step(), behavior: 'smooth' }));
-
   document.querySelectorAll<HTMLButtonElement>('.card').forEach((card) => {
     card.addEventListener('click', () => {
       const dialog = document.getElementById(card.dataset.target ?? '') as HTMLDialogElement | null;
@@ -154,47 +77,19 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
 </script>
 
 <style>
-  .carousel {
+  .grid {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: var(--s-sm);
-  }
-  .arrow {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    border: 1px solid var(--c-hairline);
-    background: var(--c-canvas);
-    color: var(--c-ink);
-    cursor: pointer;
-  }
-  .arrow svg {
-    display: block;
-  }
-  .arrow:hover {
-    background: var(--c-surface-soft);
-  }
-  .track {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: calc((100% - var(--s-md) * 2) / 3);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: var(--s-md);
-    padding: var(--s-xs) 0;
     margin: 0;
+    padding: 0;
     list-style: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
   }
-  .track::-webkit-scrollbar {
-    display: none;
+  .grid li {
+    grid-column: span 2;
   }
-  .track li {
-    scroll-snap-align: start;
+  .grid li.featured {
+    grid-column: span 3;
   }
   .card {
     display: flex;
@@ -217,23 +112,13 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
     box-shadow: 0 12px 28px rgba(10, 10, 10, 0.08);
   }
   .thumb {
-    display: grid;
-    place-items: center;
+    display: block;
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
     object-position: top;
-    font-size: var(--t-display-lg);
-    font-weight: 500;
-    color: var(--c-ink);
     border-bottom: 1px solid var(--c-hairline);
   }
-  .tone-pink { background: var(--c-pink); color: var(--c-on-primary); }
-  .tone-teal { background: var(--c-teal); color: var(--c-on-primary); }
-  .tone-lavender { background: var(--c-lavender); }
-  .tone-peach { background: var(--c-peach); }
-  .tone-ochre { background: var(--c-ochre); }
-  .tone-mint { background: var(--c-mint); }
   .card-body {
     display: flex;
     flex-direction: column;
@@ -257,8 +142,13 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
   .accent {
     background: var(--c-lavender);
   }
+  .stack-line {
+    margin-top: auto;
+    font-size: var(--t-caption-upper);
+    color: var(--c-muted);
+    word-break: keep-all;
+  }
   .summary {
-    flex: 1;
     font-size: var(--t-body-sm);
     word-break: keep-all;
     display: -webkit-box;
@@ -268,8 +158,9 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
   }
 
   .modal {
-    width: min(100% - var(--gutter) * 2, 720px);
-    max-height: 85vh;
+    width: min(100vw - 32px, 1440px);
+    height: 96vh;
+    max-height: 96vh;
     padding: 0;
     border: 0;
     border-radius: var(--r-xl);
@@ -283,7 +174,8 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
     outline: none;
   }
   .modal-body {
-    max-height: 85vh;
+    height: 100%;
+    max-height: 96vh;
     padding: var(--s-xl);
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -307,104 +199,67 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
       scrollbar-color: var(--c-muted-soft) transparent;
     }
   }
+  /* 넓은 창에서는 배너를 왼쪽, 제목·지표를 오른쪽에 두어 배너가 잘리지 않고 첫 화면에 본문이 보이게 */
+  @media (min-width: 900px) {
+    .modal-body :global(.detail-head) {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: var(--s-xl);
+      align-items: center;
+      padding-right: var(--s-xl);
+    }
+    .modal-body :global(.detail-banner) {
+      aspect-ratio: 16 / 9;
+      margin-bottom: 0;
+    }
+    /* 오른쪽 정보는 가운데 정렬하고 블록 사이를 띄워 몰려 보이지 않게 */
+    .modal-body :global(.head-info) {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-md);
+      text-align: center;
+    }
+    .modal-body :global(.head-info > *) {
+      margin: 0;
+    }
+    .modal-body :global(.head-info .title-row),
+    .modal-body :global(.head-info .stack) {
+      justify-content: center;
+    }
+    .modal-body :global(.head-info .stack) {
+      gap: var(--s-xs);
+    }
+  }
   .modal::backdrop {
     background: rgba(10, 10, 10, 0.5);
   }
+  /* 창 오른쪽 위 모서리에 두고, 스크롤해도 따라오게 */
   .modal form {
+    position: sticky;
+    top: var(--s-sm);
+    z-index: 2;
     display: flex;
     justify-content: flex-end;
+    height: 0;
   }
   .close {
-    border: 0;
-    background: none;
-    font-size: 28px;
-    line-height: 1;
-    color: var(--c-muted);
-    cursor: pointer;
-  }
-  .modal-meta {
-    font-size: var(--t-body-sm);
-    color: var(--c-muted);
-  }
-  .modal h3 {
-    font-size: var(--t-display-md);
-    margin-top: var(--s-xxs);
-  }
-  .award {
-    margin-top: var(--s-sm);
-    font-size: var(--t-body-sm);
-    font-weight: 600;
-    color: var(--c-body-strong);
-  }
-  .md :global(h2) {
-    margin: var(--s-lg) 0 var(--s-xs);
-    font-size: var(--t-caption-upper);
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--c-muted);
-  }
-  .md :global(p),
-  .md :global(li) {
-    word-break: keep-all;
-  }
-  .md :global(ul) {
-    padding-left: 1.2em;
-  }
-  .md :global(img) {
-    display: block;
-    width: 100%;
-    margin-block: var(--s-sm);
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin: calc(var(--s-sm) - var(--s-xl)) calc(var(--s-sm) - var(--s-xl)) 0 0;
     border: 1px solid var(--c-hairline);
-    border-radius: var(--r-md);
-  }
-  .md :global(li) {
-    margin-block: 6px;
-  }
-  .learned {
-    margin-top: var(--s-xl);
-    padding-top: var(--s-lg);
-    border-top: 2px solid var(--c-ink);
-  }
-  .learned h2 {
-    margin: 0 0 var(--s-xs);
-    font-size: var(--t-title-md);
-    font-weight: 600;
+    border-radius: var(--r-pill);
+    background: var(--c-canvas);
+    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.12);
+    font-size: 22px;
+    line-height: 1;
     color: var(--c-ink);
+    cursor: pointer;
+    transition: transform 150ms ease;
   }
-  .learned :global(p),
-  .learned :global(li) {
-    word-break: keep-all;
-    color: var(--c-body-strong);
-  }
-  .learned :global(p + p),
-  .learned :global(ul + p),
-  .learned :global(p + ul) {
-    margin-top: var(--s-md);
-  }
-  .learned :global(ul) {
-    padding-left: 1.2em;
-  }
-  .learned :global(li) {
-    margin-block: 6px;
-  }
-  .title-row {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: flex-start;
-    gap: var(--s-md);
-    margin-top: var(--s-xxs);
-  }
-  .title-row h3 {
-    flex: 0 1 auto;
-    min-width: 0;
-    margin-top: 0;
-  }
-  .title-row .btn {
-    flex: none;
-    height: 30px;
-    padding: 6px 12px;
+  .close:hover {
+    transform: scale(1.08);
   }
   .detail {
     margin-top: var(--s-lg);
@@ -413,76 +268,25 @@ const tones = ['pink', 'teal', 'lavender', 'peach', 'ochre', 'mint'] as const;
     border-radius: var(--r-xl);
     background: var(--c-canvas);
   }
-  .detail h3 {
-    font-size: var(--t-display-md);
-    margin-top: var(--s-xxs);
-  }
-  .detail-banner {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 7;
-    object-fit: cover;
-    object-position: top;
-    margin-bottom: var(--s-md);
-    border: 1px solid var(--c-hairline);
-    border-radius: var(--r-md);
-    break-inside: avoid;
-  }
-  .repo-line {
-    margin-top: var(--s-md);
-    font-size: var(--t-caption);
-    color: var(--c-muted);
-  }
   @media print {
-    .arrow {
-      display: none;
-    }
     .detail {
       break-inside: auto;
       margin-top: 14px;
       padding: 18px;
     }
-    .detail h3 {
-      break-after: avoid;
-    }
-    .gallery li {
-      break-inside: avoid;
-    }
-    .md :global(img) {
-      max-height: 90mm;
-      width: auto;
-      max-width: 100%;
-      margin-inline: auto;
-      break-inside: avoid;
-    }
-    .gallery {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .gallery img {
-      width: 100%;
-      max-height: none;
-      margin: 0;
-    }
-    .gallery figcaption {
-      font-size: 8pt;
-    }
   }
   @media (max-width: 900px) {
-    .track {
-      grid-auto-columns: calc((100% - var(--s-md)) / 2);
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .grid li,
+    .grid li.featured {
+      grid-column: span 1;
     }
   }
   @media (max-width: 600px) {
-    .carousel {
+    .grid {
       grid-template-columns: 1fr;
-    }
-    .arrow {
-      display: none;
-    }
-    .track {
-      grid-auto-columns: 85%;
     }
   }
 </style>
