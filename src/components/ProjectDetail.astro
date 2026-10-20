@@ -43,19 +43,21 @@ const showBanner = !!p.image;
 )}
 </div>
 </div>
-<div class="md">
+<div class="md zoomable">
   <h2>소개</h2>
   <p>{p.summary}</p>
   <p.Content />
 </div>
 {p.gallery && p.gallery.length > 0 && (
-  <div class="md">
+  <div class="md zoomable">
     <h2>화면</h2>
     <ul class="gallery">
       {p.gallery.map((g) => (
         <li>
-          <figcaption>{g.caption}</figcaption>
-          <img src={g.src} alt={g.caption} loading="lazy" />
+          <figure>
+            <figcaption>{g.caption}</figcaption>
+            <img src={g.src} alt={g.caption} loading="lazy" />
+          </figure>
         </li>
       ))}
     </ul>
@@ -160,6 +162,34 @@ const showBanner = !!p.image;
   }
   .md :global(li) {
     margin-block: 6px;
+  }
+  .zoomable :global(img) {
+    cursor: zoom-in;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-md);
+    padding: 0;
+    list-style: none;
+  }
+  .md .gallery li {
+    margin: 0;
+  }
+  .gallery figure {
+    margin: 0;
+  }
+  .gallery figcaption {
+    font-size: var(--t-body-sm);
+    color: var(--c-muted);
+  }
+  .md .gallery img {
+    margin-block: var(--s-xxs) 0;
+  }
+  @media (max-width: 480px) {
+    .gallery {
+      grid-template-columns: 1fr;
+    }
   }
   .md :global(table) {
     width: 100%;
