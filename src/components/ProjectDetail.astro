@@ -53,7 +53,7 @@ const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
 </div>
 <div class="md zoomable">
   <h2>소개</h2>
-  <p>{p.summary}</p>
+  <p>{p.summary.split(/(?<=다\.)\s+/).map((sentence, index) => <>{index > 0 && <br />}{sentence}</>)}</p>
   <p.Content />
 </div>
 {p.gallery && p.gallery.length > 0 && (
@@ -152,16 +152,26 @@ const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
     font-size: var(--t-caption);
   }
   .md :global(h2) {
-    margin: var(--s-lg) 0 var(--s-xs);
+    margin: var(--s-xl) 0 var(--s-sm);
     font-size: var(--t-caption-upper);
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: var(--c-muted);
   }
+  .md :global(h3) {
+    margin: var(--s-lg) 0 var(--s-sm);
+  }
   .md :global(p),
   .md :global(li) {
     word-break: keep-all;
+  }
+  .md :global(p + p),
+  .md :global(ul + p),
+  .md :global(ol + p),
+  .md :global(p + ul),
+  .md :global(p + ol) {
+    margin-top: var(--s-md);
   }
   .md :global(ul) {
     padding-left: 1.2em;
