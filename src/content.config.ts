@@ -16,6 +16,7 @@ const projects = defineCollection({
     learned: z.string().optional(),
     highlights: z.array(z.object({ value: z.string(), label: z.string() })).max(3).optional(),
     stack: z.array(z.string()).optional(),
+    ownStack: z.array(z.string()).optional(),
     featured: z.boolean().optional(),
   }),
 });

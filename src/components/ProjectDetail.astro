@@ -11,6 +11,7 @@ interface Props {
 const { project: p, variant } = Astro.props;
 const Title = variant === 'page' ? 'h1' : 'h3';
 const showBanner = !!p.image;
+const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
 ---
 
 <div class="detail-head">
@@ -36,8 +37,15 @@ const showBanner = !!p.image;
     ))}
   </dl>
 )}
-{p.stack && p.stack.length > 0 && (
-  <ul class="stack" aria-label="기술 스택">
+{p.ownStack && p.ownStack.length > 0 && (
+  <p class="stack-label">직접 사용한 기술</p>
+  <ul class="stack" aria-label="직접 사용한 기술">
+    {p.ownStack.map((s) => <li class="pill">{s}</li>)}
+  </ul>
+)}
+{showProjectStack && p.stack && (
+  <p class="stack-label">프로젝트 전체 기술</p>
+  <ul class="stack" aria-label="프로젝트 전체 기술">
     {p.stack.map((s) => <li class="pill">{s}</li>)}
   </ul>
 )}
@@ -137,6 +145,11 @@ const showBanner = !!p.image;
   .stack .pill {
     background: var(--c-canvas);
     border: 1px solid var(--c-hairline);
+  }
+  .stack-label {
+    margin-top: var(--s-sm);
+    color: var(--c-muted);
+    font-size: var(--t-caption);
   }
   .md :global(h2) {
     margin: var(--s-lg) 0 var(--s-xs);

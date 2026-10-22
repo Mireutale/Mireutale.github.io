@@ -31,4 +31,5 @@ export const certifications = parseBlocks(certificationsMd).map((b) => ({
 export const skills = parseBlocks(skillsMd).map((b) => ({
   group: field(b, '분류', 'skills.md'),
   items: field(b, '기술', 'skills.md').split(',').map((s) => s.trim()).filter(Boolean),
+  summary: b.summary,
 }));
