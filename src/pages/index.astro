@@ -14,7 +14,7 @@ const intro = (await getEntry('profile', 'intro'))!.data;
 <Base title={`${intro.name}의 포트폴리오`} description={intro.description}>
   <Hero />
   <nav class="contents container no-print" aria-label="포트폴리오 목차">
-    <a href="#projects">주요 프로젝트</a>
+    <a href="#projects">프로젝트</a>
     <a href="#experience">경험</a>
     <a href="#skills">기술과 활용 경험</a>
     <a href="#awards">수상·자격증</a>
@@ -31,7 +31,37 @@ const intro = (await getEntry('profile', 'intro'))!.data;
   .contents {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--s-sm) var(--s-lg);
+    justify-content: center;
+    gap: var(--s-xs);
+    padding: var(--s-xs);
+    margin-bottom: var(--s-lg);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-lg);
+    background: var(--c-surface-soft);
     font-size: var(--t-body-sm);
+  }
+  .contents a {
+    padding: var(--s-sm) var(--s-lg);
+    border-radius: var(--r-md);
+    color: var(--c-body);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .contents a:hover,
+  .contents a:focus-visible {
+    background: var(--c-ink);
+    color: var(--c-on-primary);
+  }
+  @media (max-width: 600px) {
+    .contents {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-xxs);
+    }
+    .contents a {
+      padding: var(--s-sm) var(--s-xs);
+    }
   }
 </style>

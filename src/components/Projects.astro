@@ -8,17 +8,15 @@ entries.sort((a, b) => Number(!!b.data.featured) - Number(!!a.data.featured) || 
 const projects = await Promise.all(
   entries.map(async (e) => ({ ...e.data, id: e.id, Content: (await render(e)).Content })),
 );
-const mainProjects = projects.filter((p) => p.featured || p.id === 'stress-test');
-const otherProjects = projects.filter((p) => !mainProjects.includes(p));
 ---
 
 <section id="projects" class="section" aria-labelledby="projects-heading">
   <div class="container">
-    <h2 id="projects-heading" class="section-title display">주요 프로젝트</h2>
-    <p class="quote no-print">인프라 운영과 성능 검증 경험을 담았습니다. 카드를 누르면 담당 작업과 문제 해결 과정을 볼 수 있습니다.</p>
+    <h2 id="projects-heading" class="section-title display">프로젝트</h2>
+    <p class="quote no-print">서비스 기획·설계부터 백엔드·프론트엔드 개발, AI와 인프라 운영까지. 프로젝트별 담당 작업과 문제 해결 과정을 정리했습니다.</p>
     <ul class="grid no-print">
       {
-        mainProjects.map((p) => (
+        projects.map((p) => (
           <li class:list={[{ featured: p.featured }]}>
             <button class="card" type="button" data-target={`project-${p.id}`} aria-label={`${p.name} 상세 보기`}>
               {p.image && <img class="thumb" src={p.image} alt={`${p.name} 화면`} loading="lazy" />}
@@ -37,23 +35,6 @@ const otherProjects = projects.filter((p) => !mainProjects.includes(p));
         ))
       }
     </ul>
-    {otherProjects.length > 0 && (
-      <div class="additional no-print">
-        <h3>그 외 개발 경험</h3>
-        <ul class="additional-list">
-          {otherProjects.map((p) => (
-            <li>
-              <button class="additional-project" type="button" data-target={`project-${p.id}`} aria-label={`${p.name} 상세 보기`}>
-                <span class="name">{p.name}</span>
-                <span class="additional-meta">{p.period} · {p.type} 프로젝트 · {p.role}</span>
-                <span class="summary">{p.summary}</span>
-                <span class="more">담당 작업 보기 →</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
     <div class="print-only">
       {
         projects.map((p) => (
@@ -108,36 +89,7 @@ const otherProjects = projects.filter((p) => !mainProjects.includes(p));
     grid-column: span 2;
   }
   .grid li.featured {
-    grid-column: span 2;
-  }
-  .additional {
-    margin-top: var(--s-xl);
-  }
-  .additional h3 {
-    font-size: var(--t-title-md);
-    margin-bottom: var(--s-sm);
-  }
-  .additional-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .additional-project {
-    display: grid;
-    gap: var(--s-xs);
-    width: 100%;
-    padding: var(--s-md) 0;
-    border: 0;
-    border-bottom: 1px solid var(--c-hairline);
-    background: transparent;
-    color: var(--c-body);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  .additional-meta, .more {
-    font-size: var(--t-caption);
-    color: var(--c-muted);
+    grid-column: span 3;
   }
   .card {
     display: flex;
