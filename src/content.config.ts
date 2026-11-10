@@ -1,8 +1,14 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// 프로젝트 하나 = 폴더 하나. index.md(카드·상단 정보) + detail.md(본문) + learned.md(배운 것)
+// backend/detail.md처럼 직무 폴더에 같은 이름 파일을 두면 그 직무 페이지에서만 대신 쓰임
 const projects = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/projects' }),
+  loader: glob({
+    pattern: '*/index.md',
+    base: './src/content/projects',
+    generateId: ({ entry }) => entry.split('/')[0],
+  }),
   schema: z.object({
     name: z.string(),
     period: z.string(),
@@ -14,13 +20,21 @@ const projects = defineCollection({
     image: z.string().optional(),
     imagePosition: z.string().optional(),
     gallery: z.array(z.object({ src: z.string(), caption: z.string() })).optional(),
-    learned: z.string().optional(),
     highlights: z.array(z.object({ value: z.string(), label: z.string() })).max(3).optional(),
     stack: z.array(z.string()).optional(),
     ownStack: z.array(z.string()).optional(),
     // 시연 영상 주소 (YouTube 등). 있으면 상세에 버튼이 생김
-    // TODO: Fruition·Pilltip 30~60초 시연 영상을 찍어 각 프로젝트 md에 demo: "주소" 추가하기
+    // TODO: Fruition·Pilltip 30~60초 시연 영상을 찍어 각 프로젝트 index.md에 demo: "주소" 추가하기
     demo: z.string().url().optional(),
+  }),
+});
+
+// 프로젝트 본문 파일. id는 "fruition/detail", "fruition/backend/learned" 형태
+const projectParts = defineCollection({
+  loader: glob({
+    pattern: '*/{,*/}{detail,learned}.md',
+    base: './src/content/projects',
+    generateId: ({ entry }) => entry.replace(/\.md$/, ''),
   }),
 });
 
@@ -51,4 +65,4 @@ const tracks = defineCollection({
   schema: z.object(track),
 });
 
-export const collections = { projects, profile, tracks };
+export const collections = { projects, projectParts, profile, tracks };

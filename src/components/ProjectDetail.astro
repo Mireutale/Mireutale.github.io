@@ -1,11 +1,10 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import Learned from './Learned.astro';
 import { imageSize } from '../lib/image';
+import type { Project } from '../lib/project';
 
 // 모달·인쇄·풀 페이지가 공유하는 프로젝트 상세
 interface Props {
-  project: CollectionEntry<'projects'>['data'] & { id: string; Content: any };
+  project: Project;
   variant: 'modal' | 'print' | 'page';
 }
 
@@ -63,7 +62,7 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
 <div class="md zoomable">
   <h2>소개</h2>
   <p>{p.summary.split(/(?<=다\.)\s+/).map((sentence, index) => <>{index > 0 && <br />}{sentence}</>)}</p>
-  <p.Content />
+  {p.Content && <p.Content />}
 </div>
 {p.gallery && p.gallery.length > 0 && (
   <div class="md zoomable">
@@ -80,10 +79,10 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
     </ul>
   </div>
 )}
-{p.learned && (
+{p.Learned && (
   <div class="learned">
     <h2>배운 것</h2>
-    <Learned text={p.learned} />
+    <p.Learned />
   </div>
 )}
 {variant === 'print' && p.repo && <p class="repo-line">GitHub · {p.repo.replace(/^https?:\/\//, '')}</p>}

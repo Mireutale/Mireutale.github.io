@@ -12,4 +12,4 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<Portfolio track={entry.data} Content={Content} ogImage={`/og/${entry.id}.png`} />
+<Portfolio track={entry.data} Content={Content} ogImage={`/og/${entry.id}.png`} trackId={entry.id} />

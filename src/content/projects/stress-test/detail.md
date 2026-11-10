@@ -1,26 +1,3 @@
----
-name: "분산 동시성 스트레스 테스트"
-period: "2025.11"
-type: "개인"
-role: "설계 · 구현 · 측정"
-summary: "수강신청처럼 요청이 몰리는 상황에서 고정 동시성과 적응형 동시성을 비교한 개인 실험입니다. 초당 2,000건 부하에서 실패율을 20.79%에서 0%로 낮췄습니다."
-repo: "https://github.com/Mireutale/java-Distributed-Concurrency-Stress-Test"
-image: "/img/stress-test/banner.webp"
-highlights:
-  - value: "0%"
-    label: "실패율 (기존 20.79%)"
-  - value: "462ms"
-    label: "p95 (기존 11.71s)"
-  - value: "+62%"
-    label: "처리량 (2,000 req/s 부하)"
-stack: ["Java", "Spring Boot", "WebFlux", "PostgreSQL", "Docker", "k6"]
-ownStack: ["Java", "Spring Boot", "WebFlux", "PostgreSQL", "Docker", "k6"]
-learned: |
-  측정값이 달라지면 코드와 측정 경로를 함께 확인해야 했습니다. 헤더 중복 문제 이후에는 수정마다 커밋을 남기고 결과를 비교해 어떤 변경이 영향을 줬는지 되짚었습니다.
-
-  다음에는 강좌별 DB 샤딩과 VM 기반 수평 확장을 같은 조건에서 비교해 볼 계획입니다.
----
-
 ## 실험 목적
 
 우아한테크코스 프리코스 오픈미션으로 진행했습니다.\

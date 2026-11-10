@@ -1,7 +1,8 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ProjectDetail from '../../components/ProjectDetail.astro';
+import { loadProject } from '../../lib/project';
 
 export async function getStaticPaths() {
   const entries = await getCollection('projects');
@@ -9,8 +10,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
-const project = { ...entry.data, id: entry.id, Content };
+const project = await loadProject(entry);
 const intro = (await getEntry('profile', 'intro'))!.data;
 ---
 

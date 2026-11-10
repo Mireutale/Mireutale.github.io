@@ -16,7 +16,11 @@ npm run build
 - `profile/awards.md` 수상
 - `profile/certifications.md` 자격증
 - `profile/skills.md` 기술 스택
-- `projects/*.md` 프로젝트 (파일 하나 = 프로젝트 하나, 상세 페이지 `/projects/<파일명>`)
+- `projects/<이름>/` 프로젝트 (폴더 하나 = 프로젝트 하나, 상세 페이지 `/projects/<이름>`)
+  - `index.md` 카드·상단 정보 (이름, 기간, 요약, 수치, 기술, 화면 이미지)
+  - `detail.md` 상세 본문
+  - `learned.md` 배운 것
+  - `backend/detail.md`, `infra/learned.md` … 직무 폴더에 같은 이름 파일을 두면 그 직무 페이지(`/backend/`, `/infra/`)에서만 대신 보임. 없으면 기본 파일이 쓰임
 
 `profile/` 파일은 `---` 줄로 항목을 나누며, 작성 형식은 각 파일 상단 주석 참고.
 프로젝트 frontmatter 스키마는 `src/content.config.ts`, 이미지는 `public/img/<프로젝트>/`(WebP).
@@ -30,6 +34,6 @@ npm run build
 
 - [ ] 검색 등록: [Google Search Console](https://search.google.com/search-console), [네이버 서치어드바이저](https://searchadvisor.naver.com/)에 사이트를 등록하고 `https://mireutale.github.io/sitemap-index.xml` 제출 (`astro.config.mjs`)
 - [ ] 링크 미리보기 확인: 카톡·슬랙에 `/backend/`, `/infra/` 링크를 붙여 이미지가 나오는지 확인 (`src/layouts/Base.astro`)
-- [ ] 시연 영상: Fruition·Pilltip 30~60초 영상을 찍어 프로젝트 md에 `demo: "주소"` 추가 (`src/content.config.ts`)
+- [ ] 시연 영상: Fruition·Pilltip 30~60초 영상을 찍어 프로젝트 `index.md`에 `demo: "주소"` 추가 (`src/content.config.ts`)
 - [ ] 기술 목록 맞추기: 프로필 README의 Studying Skills와 `profile/skills.md` 항목이 다름. 어느 쪽 기준으로 맞출지 정하기
 - [ ] rhwp 표현 맞추기: 프로필 README는 "HWPX → HWP 저장 시 데이터 손실", `profile/experience.md`는 "HWPX 파일을 저장할 때 정보가 사라지는 문제"

@@ -19,16 +19,18 @@ interface Props {
   };
   Content: AstroComponentFactory;
   ogImage: string;
+  // 직무 페이지 이름(backend 등). / 페이지는 없음
+  trackId?: string;
 }
 
-const { track, Content, ogImage } = Astro.props;
+const { track, Content, ogImage, trackId } = Astro.props;
 const intro = (await getEntry('profile', 'intro'))!.data;
 ---
 
 <Base title={`${intro.name} · ${track.role} 포트폴리오`} description={track.description} image={ogImage}>
   <Hero role={track.role} Content={Content} />
   <main>
-    <Projects featured={track.featured} />
+    <Projects featured={track.featured} track={trackId} />
     <Entries id="experience" title="경험" entries={experience} />
     <Awards />
     <Skills order={track.skillOrder} />

@@ -1,14 +1,17 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import ProjectDetail from './ProjectDetail.astro';
 import { imageSize } from '../lib/image';
+import { loadProject } from '../lib/project';
 
 // featured = 앞에 둘 프로젝트 id (페이지마다 순서가 다름). 나머지는 최신순으로 뒤에
+// track = 직무 이름(backend 등). 프로젝트 폴더에 그 직무용 본문이 있으면 그것을 보여 줌
 interface Props {
   featured: string[];
+  track?: string;
 }
 
-const { featured } = Astro.props;
+const { featured, track } = Astro.props;
 const entries = await getCollection('projects');
 const unknown = featured.filter((id) => !entries.some((e) => e.id === id));
 if (unknown.length) throw new Error(`featured에 없는 프로젝트가 있습니다: ${unknown.join(', ')}`);
@@ -18,9 +21,7 @@ const rank = (id: string) => (featured.includes(id) ? featured.indexOf(id) : fea
 entries.sort((a, b) => rank(a.id) - rank(b.id) || b.data.period.localeCompare(a.data.period));
 const projects = await Promise.all(
   entries.map(async (e) => ({
-    ...e.data,
-    id: e.id,
-    Content: (await render(e)).Content,
+    ...(await loadProject(e, track)),
     thumbSize: e.data.image ? await imageSize(e.data.image) : undefined,
   })),
 );

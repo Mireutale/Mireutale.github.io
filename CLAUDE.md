@@ -19,7 +19,7 @@
 | Award                  | `src/content/profile/awards.md`         |
 | Certification          | `src/content/profile/certifications.md` |
 | Studying Skills        | `src/content/profile/skills.md`         |
-| Project                | `src/content/projects/*.md`             |
+| Project                | `src/content/projects/<이름>/*.md`       |
 
 
 규칙:
@@ -32,7 +32,7 @@
 ## 구조
 
 - `src/content/profile/*.md` — `---` 줄로 항목 구분, "키: 값" 필드 + 본문. 형식은 각 파일 상단 주석, 파서는 `src/lib/blocks.ts`, `src/lib/profile.ts`
-- `src/content/projects/*.md` — frontmatter 스키마는 `src/content.config.ts`
+- `src/content/projects/<이름>/` — `index.md`(frontmatter, 스키마는 `src/content.config.ts`) + `detail.md`(본문) + `learned.md`(배운 것). `backend/`·`infra/` 하위에 같은 이름 파일이 있으면 그 직무 페이지에서 대신 쓰인다. 직무별 파일도 사실은 프로필 README와 일치해야 한다
 - `src/content/tracks/*.md` — 직무별 페이지(`/backend/`, `/infra/`)의 직무명·소개·대표 프로젝트·기술 순서. `/`는 `intro.md`가 같은 역할. 소개 문단의 사실도 프로필 README·프로젝트 md와 일치해야 한다
 - `public/og/*.png` — 소개 페이지 링크 미리보기 이미지. `role`·`description`을 바꾸면 `npm run og`로 다시 만든다(Chrome 필요)
 - `public/img/<프로젝트>/` — 프로젝트 이미지

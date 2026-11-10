@@ -1,37 +1,3 @@
----
-name: "Fruition"
-period: "2026.04 ~ 현재"
-type: "팀"
-role: "팀장 · AWS 인프라 · DevOps · 아키텍처 · 기획 · 프론트"
-summary: "개인 문서를 위키로 정리하고 질문에 원문 출처와 함께 답하는 지식 관리 서비스입니다. AI·SW 마에스트로 17기 3인 팀의 팀장으로 기획·아키텍처 설계·프론트엔드 개발과 AWS 인프라·배포를 맡았습니다."
-highlights:
-  - value: "30/30"
-    label: "10분 AI 작업 동시 처리 (모놀리스 0건)"
-  - value: "3,000+"
-    label: "자동 테스트 (AI·BE·FE)"
-  - value: "7ms"
-    label: "AI 폭주 시 인증 응답 중앙값 (로컬 k6, 기존 10s)"
-stack: ["AWS EKS", "Terraform", "Kafka (Strimzi)", "KEDA", "GitHub Actions OIDC", "PostgreSQL", "Redis", "Next.js"]
-repo: "https://github.com/FruitionKR"
-image: "/img/fruition/banner.webp"
-# 카드 썸네일에서 보일 위치 (CSS object-position)
-imagePosition: "68% center"
-gallery:
-  - src: "/img/fruition/workspace.webp"
-    caption: "워크스페이스 · AI 어시스턴트"
-  - src: "/img/fruition/wiki.webp"
-    caption: "LLM Wiki · 지식 그래프"
-  - src: "/img/fruition/history.webp"
-    caption: "스킬 · 히스토리 롤백"
-  - src: "/img/fruition/auth.webp"
-    caption: "로그인 · 회원가입"
-ownStack: ["AWS EKS", "Terraform", "GitHub Actions OIDC", "Kafka (Strimzi)", "KEDA", "Next.js"]
-learned: |
-  처음에는 사용자가 문서 규칙 파일을 직접 관리할 것이라고 가정했습니다. 일부 사용자에게 유지보수가 복잡하다는 의견을 듣고 편집기 안에서 LLM이 편집을 돕는 방식으로 바꿨습니다. 구현 가능 여부와 사용자가 계속 쓸지는 따로 확인해야 했습니다.
-
-  인프라는 장애 영향과 운영 단계에 따라 구성을 달리했습니다. 인증은 이중화하고 테스트 데이터를 다루는 코어 DB는 Single-AZ로 뒀습니다. MSA 역시 같은 부하 조건에서 인증 응답을 유지하는지 확인한 뒤 선택했습니다.
----
-
 ## 해결하려던 문제
 
 PDF, 워드, 노션, 메모 앱에 자료를 모아도 내용만 어렴풋이 기억나 정작 필요할 때 찾지 못하는 문제에서 출발했습니다.\
