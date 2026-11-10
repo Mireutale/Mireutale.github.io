@@ -19,6 +19,7 @@ const projects = defineCollection({
     stack: z.array(z.string()).optional(),
     ownStack: z.array(z.string()).optional(),
     // 시연 영상 주소 (YouTube 등). 있으면 상세에 버튼이 생김
+    // TODO: Fruition·Pilltip 30~60초 시연 영상을 찍어 각 프로젝트 md에 demo: "주소" 추가하기
     demo: z.string().url().optional(),
   }),
 });

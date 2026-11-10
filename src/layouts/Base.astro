@@ -30,6 +30,7 @@ const imageUrl = new URL(image, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    {/* TODO: 카톡·슬랙에 /backend/, /infra/ 링크를 붙여 미리보기 이미지가 나오는지 확인하기 */}
     <meta property="og:image" content={imageUrl} />
     <meta property="og:locale" content="ko_KR" />
     <meta name="twitter:card" content="summary_large_image" />
