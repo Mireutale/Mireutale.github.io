@@ -18,7 +18,7 @@ export const experience = parseBlocks(experienceMd).map((b) => {
     org: field(b, '기관', 'experience.md'),
     url: b.fields['주소'],
     role: field(b, '역할', 'experience.md'),
-    period: field(b, '기간', 'experience.md'),
+    period: b.fields['기간'],
     summary: b.summary,
     bullets: b.bullets,
     sections: b.sections,

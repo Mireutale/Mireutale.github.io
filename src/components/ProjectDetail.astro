@@ -6,17 +6,17 @@ import type { Project } from '../lib/project';
 interface Props {
   project: Project;
   variant: 'modal' | 'print' | 'page';
+  // 직무 페이지(backend 등)에서 열었으면 전체 페이지도 그 직무 본문으로 연결
+  track?: string;
 }
 
-const { project: p, variant } = Astro.props;
+const { project: p, variant, track } = Astro.props;
 const Title = variant === 'page' ? 'h1' : 'h3';
 const showBanner = !!p.image;
-// 직접 사용한 기술과 겹치지 않는 나머지만 팀 기술로 보여 줌
-const teamStack = p.stack?.filter((s) => !p.ownStack?.includes(s)) ?? [];
 const bannerSize = p.image ? await imageSize(p.image) : undefined;
 ---
 
-<div class="detail-head">
+<div class:list={['detail-head', { split: variant !== 'print' }]}>
 {showBanner && <img class="detail-banner" src={p.image} alt={`${p.name} 배너`} {...bannerSize} />}
 <div class="head-info">
 <p class="modal-meta">
@@ -31,7 +31,7 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
     <a class="btn btn-primary" href={p.demo} target="_blank" rel="noopener">▶ 시연 영상</a>
   )}
   {variant === 'modal' && (
-    <a class="btn btn-secondary" href={`/projects/${p.id}/`}>전체 페이지 ↗</a>
+    <a class="btn btn-secondary" href={`${track ? `/${track}` : ''}/projects/${p.id}/`}>전체 페이지 ↗</a>
   )}
   </div>
 {p.award && <p class="award">🏆 {p.award}</p>}
@@ -49,12 +49,6 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
   <p class="stack-label">직접 사용한 기술</p>
   <ul class="stack" aria-label="직접 사용한 기술">
     {p.ownStack.map((s) => <li class="pill">{s}</li>)}
-  </ul>
-)}
-{teamStack.length > 0 && (
-  <p class="stack-label">팀에서 함께 사용한 기술</p>
-  <ul class="stack" aria-label="팀에서 함께 사용한 기술">
-    {teamStack.map((s) => <li class="pill">{s}</li>)}
   </ul>
 )}
 </div>
@@ -277,6 +271,36 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
     border: 1px solid var(--c-hairline);
     border-radius: var(--r-md);
     break-inside: avoid;
+  }
+  /* 모달·전체 페이지 공통: 넓은 창에서는 배너를 왼쪽, 제목·지표를 오른쪽에 두어 배너가 잘리지 않고 첫 화면에 본문이 보이게 */
+  @media (min-width: 900px) {
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: var(--s-xl);
+      align-items: center;
+    }
+    .split .detail-banner {
+      aspect-ratio: 16 / 9;
+      margin-bottom: 0;
+    }
+    /* 오른쪽 정보는 가운데 정렬하고 블록 사이를 띄워 몰려 보이지 않게 */
+    .split .head-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-md);
+      text-align: center;
+    }
+    .split .head-info > * {
+      margin: 0;
+    }
+    .split .title-row,
+    .split .stack {
+      justify-content: center;
+    }
+    .split .stack {
+      gap: var(--s-xs);
+    }
   }
   .repo-line {
     margin-top: var(--s-md);

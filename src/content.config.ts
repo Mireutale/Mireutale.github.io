@@ -21,7 +21,6 @@ const projects = defineCollection({
     imagePosition: z.string().optional(),
     gallery: z.array(z.object({ src: z.string(), caption: z.string() })).optional(),
     highlights: z.array(z.object({ value: z.string(), label: z.string() })).max(3).optional(),
-    stack: z.array(z.string()).optional(),
     ownStack: z.array(z.string()).optional(),
     // 시연 영상 주소 (YouTube 등). 있으면 상세에 버튼이 생김
     // TODO: Fruition·Pilltip 30~60초 시연 영상을 찍어 각 프로젝트 index.md에 demo: "주소" 추가하기

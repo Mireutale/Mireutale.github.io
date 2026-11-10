@@ -51,11 +51,6 @@ const projects = await Promise.all(
                     ))}
                   </span>
                 )}
-                {(p.ownStack || p.stack) && (
-                  <span class="tags">
-                    {(p.ownStack || p.stack)!.map((t) => <span class="pill">{t}</span>)}
-                  </span>
-                )}
               </span>
             </button>
           </li>
@@ -80,7 +75,7 @@ const projects = await Promise.all(
         <form method="dialog">
           <button class="close" type="submit" aria-label="닫기">×</button>
         </form>
-        <ProjectDetail project={p} variant="modal" />
+        <ProjectDetail project={p} variant="modal" track={track} />
         </div>
       </dialog>
     ))
@@ -112,7 +107,7 @@ const projects = await Promise.all(
     padding: 0;
     list-style: none;
   }
-  /* 썸네일 목록형: 왼쪽 작은 썸네일, 오른쪽 제목·한 줄 정보·요약·근거 수치·기술 */
+  /* 썸네일 목록형: 왼쪽 작은 썸네일, 오른쪽 제목·한 줄 정보·요약·근거 수치 */
   .card {
     display: grid;
     grid-template-columns: var(--col-side) minmax(0, 1fr);
@@ -196,13 +191,6 @@ const projects = await Promise.all(
     font-weight: 600;
     color: var(--c-ink);
   }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-xxs);
-    margin-top: var(--s-xxs);
-  }
-
   .modal {
     width: min(100vw - 32px, 1440px);
     height: 96vh;
@@ -245,35 +233,10 @@ const projects = await Promise.all(
       scrollbar-color: var(--c-muted-soft) transparent;
     }
   }
-  /* 넓은 창에서는 배너를 왼쪽, 제목·지표를 오른쪽에 두어 배너가 잘리지 않고 첫 화면에 본문이 보이게 */
+  /* 2단 헤더는 ProjectDetail에 있음. 오른쪽 위 닫기 버튼과 겹치지 않게 여백만 */
   @media (min-width: 900px) {
     .modal-body :global(.detail-head) {
-      display: grid;
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      gap: var(--s-xl);
-      align-items: center;
       padding-right: var(--s-xl);
-    }
-    .modal-body :global(.detail-banner) {
-      aspect-ratio: 16 / 9;
-      margin-bottom: 0;
-    }
-    /* 오른쪽 정보는 가운데 정렬하고 블록 사이를 띄워 몰려 보이지 않게 */
-    .modal-body :global(.head-info) {
-      display: flex;
-      flex-direction: column;
-      gap: var(--s-md);
-      text-align: center;
-    }
-    .modal-body :global(.head-info > *) {
-      margin: 0;
-    }
-    .modal-body :global(.head-info .title-row),
-    .modal-body :global(.head-info .stack) {
-      justify-content: center;
-    }
-    .modal-body :global(.head-info .stack) {
-      gap: var(--s-xs);
     }
   }
   .modal::backdrop {

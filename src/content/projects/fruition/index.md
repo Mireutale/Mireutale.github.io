@@ -11,7 +11,6 @@ highlights:
     label: "자동 테스트 (AI·BE·FE)"
   - value: "7ms"
     label: "AI 폭주 시 인증 응답 중앙값 (로컬 k6, 기존 10s)"
-stack: ["AWS EKS", "Terraform", "Kafka (Strimzi)", "KEDA", "GitHub Actions OIDC", "PostgreSQL", "Redis", "Next.js"]
 repo: "https://github.com/FruitionKR"
 image: "/img/fruition/banner.webp"
 # 카드 썸네일에서 보일 위치 (CSS object-position)

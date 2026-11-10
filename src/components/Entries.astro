@@ -11,7 +11,7 @@ interface Entry extends Block {
   org: string;
   url?: string;
   role: string;
-  period: string;
+  period?: string;
   sections?: readonly Block[];
 }
 
@@ -47,7 +47,7 @@ const external = (url: string) => /^https?:/.test(url);
           <ol class="timeline">
             {g.items.map((e) => (
               <li class="item">
-                <p class="when">{e.period}</p>
+                {e.period && <p class="when">{e.period}</p>}
                 <div class="body">
                   <h4 class="what">
                     {e.role} ·{' '}
@@ -127,6 +127,10 @@ const external = (url: string) => /^https?:/.test(url);
     gap: var(--s-lg);
     padding-block: var(--s-lg);
     border-top: 1px solid var(--c-hairline);
+  }
+  /* 기간이 없어도 내용은 오른쪽(좁은 화면에서는 한 칸) 열에 */
+  .body {
+    grid-column: -2 / -1;
   }
   .when {
     padding-top: 3px;

@@ -13,6 +13,5 @@ highlights:
     label: "p95 (기존 11.71s)"
   - value: "+62%"
     label: "처리량 (2,000 req/s 부하)"
-stack: ["Java", "Spring Boot", "WebFlux", "PostgreSQL", "Docker", "k6"]
 ownStack: ["Java", "Spring Boot", "WebFlux", "PostgreSQL", "Docker", "k6"]
 ---

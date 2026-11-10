@@ -10,7 +10,6 @@ highlights:
     label: "알약 인식 정답률 (YOLOv8)"
   - value: "10개월"
     label: "온프레미스 직접 운영"
-stack: ["Spring Boot", "MySQL", "Elasticsearch", "Redis", "Nginx", "Docker", "YOLOv8"]
 repo: "https://github.com/PillTipKR/Pilltip"
 image: "/img/pilltip/banner.webp"
 gallery:
