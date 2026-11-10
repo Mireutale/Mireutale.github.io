@@ -30,8 +30,8 @@ const intro = (await getEntry('profile', 'intro'))!.data;
 <Base title={`${intro.name} · ${track.role} 포트폴리오`} description={track.description} image={ogImage}>
   <Hero role={track.role} Content={Content} />
   <main>
-    <Projects featured={track.featured} track={trackId} />
     <Entries id="experience" title="경험" entries={experience} />
+    <Projects featured={track.featured} track={trackId} />
     <Awards />
     <Skills order={track.skillOrder} />
   </main>

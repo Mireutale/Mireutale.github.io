@@ -8,10 +8,6 @@
 - "- "로 시작하는 줄: 세부 내용 (꼭 필요한 것만)
 - "### 제목": 같은 항목 안의 하위 묶음 (아래에 다시 "- " 목록)
 - 링크는 [글자](주소) 형식. 프로젝트 상세는 /projects/<파일 이름>/
-
-TODO: rhwp 표현이 README와 다름. 정확한 쪽으로 맞추기
-  - README: "HWPX → HWP 저장 시 데이터 손실"
-  - 사이트: "HWPX 파일을 저장할 때 정보가 사라지는 문제"
 -->
 
 ---
@@ -20,7 +16,12 @@ TODO: rhwp 표현이 README와 다름. 정확한 쪽으로 맞추기
 역할: 17기 연수생
 기간: 2026.04 ~ 현재
 
-서울 센터 17기 연수생으로 3인 팀 Fruition의 팀장을 맡아 기획·아키텍처·프론트엔드·AWS 인프라·DevOps를 담당하고 있습니다. AWS EKS 기반 MSA를 설계하고 CI/CD·모니터링을 구축했으며, 팀 개발 규칙 문서와 공용 스킬로 AI를 활용하는 개발 환경을 만들었습니다. 자세한 설계와 측정 결과는 [Fruition 프로젝트](/projects/fruition/)에 정리했습니다.
+서울 센터 17기 연수생으로 3인 팀의 팀장을 맡아, 현업 전문가 멘토링을 받으며 서비스를 기획하고 개발하고 있습니다.
+
+- 정규·자유 멘토링에서 서비스 기획과 MVP 범위, 백엔드 아키텍처와 시스템 안정화, Agentic AI 활용 방식에 대한 피드백을 받아 기능 우선순위와 설계에 반영
+- 요구사항 구체화부터 구현 계획, 코드 작성, 테스트, 문서화까지 생성형 AI와 코딩 에이전트를 활용하고, 결과물은 코드 리뷰와 테스트로 검증한 뒤 반영
+- AWS 공식 교육 Cloud Architecture 트랙 수료: Architecting on AWS · Agentic AI Foundations · Building Agentic AI with Amazon Bedrock AgentCore
+- 프로젝트: [Fruition](/projects/fruition/) · AI Agent 지식 워크스페이스
 
 ---
 분류: 경험
@@ -28,7 +29,7 @@ TODO: rhwp 표현이 README와 다름. 정확한 쪽으로 맞추기
 역할: 개발 인턴
 기간: 2025.06 ~ 2025.08
 
-무역 서류 자동화 시스템에서 종이 서류를 OCR로 읽고 관세청 unipass API에 연동해 수출입 서류 입력을 자동화했습니다. 서류 양식마다 다른 필드를 정규화하는 후처리를 설계하고, React·Next.js로 로그인·회원가입 웹 페이지를 구현했습니다.
+무역 서류 자동화 시스템에서 종이 서류를 OCR로 읽고 관세청 unipass API에 연동해 수출입 서류 입력을 자동화했습니다. React·Next.js로 로그인·회원가입 웹 페이지를 개발했습니다.
 
 ---
 분류: 경험
@@ -36,7 +37,13 @@ TODO: rhwp 표현이 README와 다름. 정확한 쪽으로 맞추기
 역할: 백엔드/클라우드 과정
 기간: 2025.02.03 ~ 2025.02.14
 
-부산대학교 정보컴퓨터공학부가 주최하고 멋쟁이사자처럼이 운영한 과정으로, FastAPI 백엔드 개발부터 AWS Lightsail 배포(Gunicorn·systemd·Nginx)까지 다뤘습니다. 팀 프로젝트 [당근마켓 클론코딩](/projects/carrot-market/)에서 설계와 백엔드를 맡았습니다.
+부산대학교 정보컴퓨터공학부가 주최하고 멋쟁이사자처럼이 운영한 과정으로, API 기초부터 FastAPI 백엔드 개발, AWS 배포까지 배웠습니다.
+
+- API 기초: HTTP 요청·응답 구조와 간단한 HTTP 서버 직접 구현, RESTful API 설계 원칙
+- FastAPI: 파라미터와 응답 모델, Router로 경로별 파일 분리, 의존성 주입, SQLModel DB 연동과 Pydantic 데이터 검증
+- 성능·인증: Redis 캐싱, async/await 비동기 처리, WebSocket 채팅, JWT 발급·검증과 비밀번호 해싱
+- 배포: AWS Lightsail(Ubuntu)에 Gunicorn·systemd·Nginx로 서비스 배포
+- 프로젝트: [당근마켓 API 리버싱](/projects/carrot-market/) · 4인 팀
 
 ---
 분류: 오픈소스
@@ -45,7 +52,7 @@ TODO: rhwp 표현이 README와 다름. 정확한 쪽으로 맞추기
 역할: Rust 기반 HWP 뷰어·에디터
 기간: 2026.06
 
-HWPX 파일을 저장할 때 정보가 사라지는 문제를 고친 PR 4건이 반영됐습니다. AI로 처음 보는 코드 흐름을 빠르게 파악하되, 제안을 그대로 쓰지 않고 기존 코드 방식과 cargo test·clippy·회귀 테스트로 직접 검증했습니다.
+HWPX 파일을 HWP로 저장할 때 데이터가 손실되는 문제를 고친 PR 4건이 반영됐습니다. AI로 처음 보는 코드 흐름을 빠르게 파악하되, 제안을 그대로 쓰지 않고 기존 코드 방식과 cargo test·clippy·회귀 테스트로 직접 검증했습니다.
 
 - [#1222](https://github.com/edwardkim/rhwp/pull/1222) 본문과 표 안 문단의 id 충돌(문단 번호 겹침) 수정
 - [#1311](https://github.com/edwardkim/rhwp/pull/1311) 표 테두리 대각선 방향 정보 유지
@@ -61,4 +68,4 @@ HWPX 파일을 저장할 때 정보가 사라지는 문제를 고친 PR 4건이 
 보안동아리 [KEEPER](https://keeper.or.kr/) 14기(2022.08 ~ 2026.02)로 활동했고, 2024.08 ~ 2025.08에는 15.5기·16기 멘토와 학술부장을 맡아 동아리 학습 커리큘럼과 스터디 운영을 총괄했습니다.
 
 - 2025 K-ICT in Busan 부산대학교 대표 참가 (2025.07.17)
-- SK AI SUMMIT 2025 부산대학교 대표 참가 (2025.11.02)
+- SK AI SUMMIT 2025 부산대학교 대표 참가 (2025.11.03 ~ 2025.11.04)
