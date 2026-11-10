@@ -40,7 +40,7 @@ const projects = await Promise.all(
                 {p.image && <img class="thumb" src={p.image} alt="" loading="lazy" {...p.thumbSize} style={p.imagePosition && `object-position: ${p.imagePosition}`} />}
               </span>
               <span class="card-body">
-                <span class="name">{p.name} <span class="arrow" aria-hidden="true">↗</span></span>
+                <span class="name"><span class="mark">{p.name}</span> <span class="arrow" aria-hidden="true">↗</span></span>
                 <span class="meta">{p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}</span>
                 <span class="summary">{p.summary}</span>
                 {(p.award || p.highlights) && (
@@ -99,6 +99,9 @@ const projects = await Promise.all(
 </script>
 
 <style>
+  .section {
+    --mark-color: var(--c-pink);
+  }
   /* 카드 안쪽 여백만큼 바깥으로 빼서 썸네일·본문 위치를 다른 섹션과 맞춤 (호버 배경만 여백까지 번짐) */
   .grid {
     display: grid;

@@ -13,6 +13,11 @@
   --c-surface-card: #f5f0e0;
   --c-on-primary: #ffffff;
   --c-lavender: #b8a4ed;
+  --c-green: #86efac;
+  --c-yellow: #fde047;
+  --c-pink: #f9a8d4;
+  /* 형광펜 색. 섹션마다 다시 정함: 소개 초록, 경험 노랑, 프로젝트 분홍 */
+  --mark-color: var(--c-green);
   --c-link: #1d4ed8;
   --c-link-hover: #1e40af;
 

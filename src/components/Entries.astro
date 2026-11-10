@@ -50,14 +50,16 @@ const external = (url: string) => /^https?:/.test(url);
                 {e.period && <p class="when">{e.period}</p>}
                 <div class="body">
                   <h4 class="what">
-                    {e.role} ·{' '}
-                    {e.url ? (
-                      <a href={e.url} target="_blank" rel="noopener">
-                        {e.org} ↗
-                      </a>
-                    ) : (
-                      e.org
-                    )}
+                    <span class="mark">
+                      {e.role} ·{' '}
+                      {e.url ? (
+                        <a href={e.url} target="_blank" rel="noopener">
+                          {e.org}
+                        </a>
+                      ) : (
+                        e.org
+                      )}
+                    </span>
                   </h4>
                   {[e, ...(e.sections ?? [])].map((block, i) => (
                     <div class:list={['block', { later: i > 0 }]}>
@@ -105,6 +107,9 @@ const external = (url: string) => /^https?:/.test(url);
 </section>
 
 <style>
+  .section {
+    --mark-color: var(--c-yellow);
+  }
   .group + .group {
     margin-top: var(--s-xxl);
   }
@@ -145,13 +150,6 @@ const external = (url: string) => /^https?:/.test(url);
     font-weight: 600;
     color: var(--c-ink);
     word-break: keep-all;
-  }
-  .what a {
-    color: inherit;
-    text-decoration: none;
-  }
-  .what a:hover {
-    color: var(--c-link);
   }
   .summary {
     max-width: 44em;

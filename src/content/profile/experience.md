@@ -21,7 +21,7 @@
 
 - 정규·자유 멘토링에서 서비스를 기획하고 개발·운영하는 데 필요한 지식과 역량을 쌓음
 - 서비스 기획과 MVP 범위, 백엔드 아키텍처와 시스템 안정화, Agentic AI 활용 방식에 대해 피드백을 받아 설계에 반영
-- 요구사항 구체화부터 구현 계획, 코드 작성, 테스트, 문서화까지 생성형 AI와 코딩 에이전트를 활용하고, 결과물은 코드 리뷰와 테스트로 검증한 뒤 반영
+- 요구사항 구체화부터 구현 계획, 코드 작성, 테스트, 문서화까지 생성형 AI를 활용하고, 결과물은 코드 리뷰와 테스트로 검증한 뒤 반영
 - AWS 공식 교육 Cloud Architecture 트랙 수료: Architecting on AWS · Agentic AI Foundations · Building Agentic AI with Amazon Bedrock AgentCore
 
 ---
@@ -51,12 +51,12 @@
 주소: https://github.com/edwardkim/rhwp
 역할: Rust 기반 HWP 뷰어·에디터
 
-HWPX 파일을 HWP로 저장할 때 데이터가 손실되는 문제를 고친 PR 4건이 반영됐습니다. AI로 처음 보는 코드 흐름을 빠르게 파악하되, 제안을 그대로 쓰지 않고 기존 코드 방식과 cargo test·clippy·회귀 테스트로 직접 검증했습니다.
-
-- [#1222](https://github.com/edwardkim/rhwp/pull/1222) 본문과 표 안 문단의 id 충돌(문단 번호 겹침) 수정
-- [#1311](https://github.com/edwardkim/rhwp/pull/1311) 표 테두리 대각선 방향 정보 유지
-- [#1349](https://github.com/edwardkim/rhwp/pull/1349) 그림의 그림자·효과 정보 보존
-- [#1360](https://github.com/edwardkim/rhwp/pull/1360) 표 칸 안의 탭·줄바꿈 저장
+HWPX 파일을 HWP로 저장할 때 데이터가 손실되는 문제를 고친 PR 4건이 반영됐습니다. 
+코드는 AI로 빠르게 파악하되 제안을 그대로 쓰지 않고 기존 코드 방식과 테스트로 직접 검증했으며, 모든 수정에 회귀 테스트를 추가했습니다.
+- 표 테두리 대각선 방향 정보 유지 ([#1311](https://github.com/edwardkim/rhwp/pull/1311))
+- 문단 번호 겹침 방지 ([#1222](https://github.com/edwardkim/rhwp/pull/1222))
+- 그림의 그림자·효과 정보 보존 ([#1349](https://github.com/edwardkim/rhwp/pull/1349))
+- 표 칸 안의 탭·줄바꿈 저장 ([#1360](https://github.com/edwardkim/rhwp/pull/1360))
 
 ---
 분류: 학력

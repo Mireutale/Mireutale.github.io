@@ -84,18 +84,55 @@ const profile = (await getEntry('profile', 'intro'))!.data;
     max-width: 40em;
     word-break: keep-all;
   }
-  .text :global(p:first-child) {
+  /* 첫 문단 = 한 줄 소개 */
+  .text > :global(p:first-child) {
     font-size: var(--t-title-md);
     font-weight: 600;
     color: var(--c-body-strong);
   }
-  /* 본문 끝의 목록 = 성향 */
-  .text :global(ul) {
+  /* 목록 1단계 = 성향 묶음. 불릿 없이 첫 줄을 소제목처럼 */
+  .text > :global(ul) {
+    display: grid;
+    gap: var(--s-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* 글자 아래쪽만 칠하는 형광펜. 줄이 바뀌어도 줄마다 이어지게 inline */
+  .text > :global(ul > li > p) {
+    display: inline;
+    font-size: var(--t-body-md);
+    font-weight: 600;
+    color: var(--c-ink);
+    background: linear-gradient(transparent 60%, color-mix(in srgb, var(--mark-color) 55%, transparent) 60%); /* global.css .mark와 같은 형광펜 */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  /* 2단계 = 일하는 방식 */
+  .text :global(ul ul) {
     display: grid;
     gap: var(--s-xxs);
-    margin: 0;
-    padding-left: 1.2em;
+    margin-top: var(--s-xs);
+    padding-left: 1.1em;
+    list-style: disc;
     font-size: var(--t-body-sm);
+    color: var(--c-body);
+  }
+  .text :global(ul ul li::marker) {
+    color: var(--c-muted-soft);
+  }
+  /* 3단계 = 근거 수치. 불릿 대신 왼쪽 선으로 묶음 */
+  .text :global(ul ul ul) {
+    gap: var(--s-xs);
+    margin-block: var(--s-xs);
+    padding-left: var(--s-md);
+    border-left: 2px solid var(--c-hairline);
+    list-style: none;
+    color: var(--c-muted);
+  }
+  .text :global(ul ul ul strong) {
+    color: var(--c-ink);
+    white-space: nowrap;
   }
   @media (max-width: 768px) {
     .header {
