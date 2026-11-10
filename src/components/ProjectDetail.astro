@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Learned from './Learned.astro';
+import { imageSize } from '../lib/image';
 
 // 모달·인쇄·풀 페이지가 공유하는 프로젝트 상세
 interface Props {
@@ -11,11 +12,13 @@ interface Props {
 const { project: p, variant } = Astro.props;
 const Title = variant === 'page' ? 'h1' : 'h3';
 const showBanner = !!p.image;
-const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
+// 직접 사용한 기술과 겹치지 않는 나머지만 팀 기술로 보여 줌
+const teamStack = p.stack?.filter((s) => !p.ownStack?.includes(s)) ?? [];
+const bannerSize = p.image ? await imageSize(p.image) : undefined;
 ---
 
 <div class="detail-head">
-{showBanner && <img class="detail-banner" src={p.image} alt={`${p.name} 배너`} />}
+{showBanner && <img class="detail-banner" src={p.image} alt={`${p.name} 배너`} {...bannerSize} />}
 <div class="head-info">
 <p class="modal-meta">
   {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
@@ -24,6 +27,12 @@ const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
   <Title id={variant === 'modal' ? `project-${p.id}-title` : undefined} class="title display">{p.name}</Title>
   {variant !== 'print' && p.repo && (
     <a class="btn btn-primary" href={p.repo} target="_blank" rel="noopener">GitHub →</a>
+  )}
+  {variant !== 'print' && p.demo && (
+    <a class="btn btn-primary" href={p.demo} target="_blank" rel="noopener">▶ 시연 영상</a>
+  )}
+  {variant === 'modal' && (
+    <a class="btn btn-secondary" href={`/projects/${p.id}/`}>전체 페이지 ↗</a>
   )}
   </div>
 {p.award && <p class="award">🏆 {p.award}</p>}
@@ -43,10 +52,10 @@ const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
     {p.ownStack.map((s) => <li class="pill">{s}</li>)}
   </ul>
 )}
-{showProjectStack && p.stack && (
-  <p class="stack-label">프로젝트 전체 기술</p>
-  <ul class="stack" aria-label="프로젝트 전체 기술">
-    {p.stack.map((s) => <li class="pill">{s}</li>)}
+{teamStack.length > 0 && (
+  <p class="stack-label">팀에서 함께 사용한 기술</p>
+  <ul class="stack" aria-label="팀에서 함께 사용한 기술">
+    {teamStack.map((s) => <li class="pill">{s}</li>)}
   </ul>
 )}
 </div>
@@ -261,6 +270,7 @@ const showProjectStack = p.stack?.some((s) => !p.ownStack?.includes(s));
   .detail-banner {
     display: block;
     width: 100%;
+    height: auto;
     aspect-ratio: 16 / 7;
     object-fit: cover;
     object-position: top;

@@ -1,0 +1,15 @@
+---
+import Portfolio from '../layouts/Portfolio.astro';
+import { getCollection, render } from 'astro:content';
+
+// src/content/tracks/<이름>.md → /<이름>/
+export async function getStaticPaths() {
+  const tracks = await getCollection('tracks');
+  return tracks.map((entry) => ({ params: { track: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Portfolio track={entry.data} Content={Content} ogImage={`/og/${entry.id}.png`} />

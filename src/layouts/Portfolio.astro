@@ -1,0 +1,36 @@
+---
+import Base from './Base.astro';
+import Hero from '../components/Hero.astro';
+import Entries from '../components/Entries.astro';
+import Projects from '../components/Projects.astro';
+import Skills from '../components/Skills.astro';
+import Awards from '../components/Awards.astro';
+import { getEntry } from 'astro:content';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import { experience } from '../lib/profile';
+
+// /, /backend/, /infra/ 가 공유하는 한 페이지. 소개·대표 프로젝트·기술 순서만 다름
+interface Props {
+  track: {
+    role: string;
+    description: string;
+    featured: string[];
+    skillOrder?: string[];
+  };
+  Content: AstroComponentFactory;
+  ogImage: string;
+}
+
+const { track, Content, ogImage } = Astro.props;
+const intro = (await getEntry('profile', 'intro'))!.data;
+---
+
+<Base title={`${intro.name} · ${track.role} 포트폴리오`} description={track.description} image={ogImage}>
+  <Hero role={track.role} Content={Content} />
+  <main>
+    <Projects featured={track.featured} />
+    <Entries id="experience" title="경험" entries={experience} />
+    <Awards />
+    <Skills order={track.skillOrder} />
+  </main>
+</Base>

@@ -9,10 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node scripts/og-images.mjs"
   },
   "dependencies": {
-    "astro": "^7.3.5"
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.5",
+    "sharp": "^0.35.5"
   },
   "allowScripts": {
     "esbuild": true

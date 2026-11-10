@@ -1,19 +1,27 @@
 ---
 import { skills } from '../lib/profile';
+
+// order = 앞에 둘 분류 이름. 적지 않은 분류는 skills.md 순서대로 뒤에 붙음
+interface Props {
+  order?: string[];
+}
+
+const { order = [] } = Astro.props;
+const unknown = order.filter((g) => !skills.some((s) => s.group === g));
+if (unknown.length) throw new Error(`skillOrder에 없는 분류가 있습니다: ${unknown.join(', ')}`);
+const rank = (group: string) => (order.includes(group) ? order.indexOf(group) : order.length);
+const sorted = [...skills].sort((a, b) => rank(a.group) - rank(b.group));
 ---
 
 <section id="skills" class="section" aria-labelledby="skills-heading">
   <div class="container">
-    <h2 id="skills-heading" class="section-title display">기술과 활용 경험</h2>
+    <h2 id="skills-heading" class="section-title display">기술</h2>
     <dl>
       {
-        skills.map((g) => (
+        sorted.map((g) => (
           <div class="row">
             <dt>{g.group}</dt>
-            <dd>
-              <p>{g.items.join(', ')}</p>
-              {g.summary && <p class="usage">{g.summary}</p>}
-            </dd>
+            <dd>{g.items.join(' · ')}</dd>
           </div>
         ))
       }
@@ -24,30 +32,22 @@ import { skills } from '../lib/profile';
 <style>
   .row {
     display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: var(--s-xl);
+    grid-template-columns: var(--col-side) 1fr;
+    gap: var(--s-lg);
     padding-block: var(--s-sm);
-    border-bottom: 1px solid var(--c-hairline-soft);
-  }
-  .row:last-child {
-    border-bottom: 0;
+    border-top: 1px solid var(--c-hairline);
   }
   dt {
-    font-size: var(--t-caption-upper);
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--c-muted);
     padding-top: 2px;
+    font-size: var(--t-caption);
+    font-weight: 500;
+    color: var(--c-muted);
   }
   dd {
-    color: var(--c-body-strong);
+    margin: 0;
+    font-weight: 500;
+    color: var(--c-ink);
     word-break: keep-all;
-  }
-  .usage {
-    margin-top: var(--s-xs);
-    color: var(--c-muted);
-    font-size: var(--t-body-sm);
   }
   @media (max-width: 768px) {
     .row {

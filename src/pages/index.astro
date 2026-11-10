@@ -1,22 +1,9 @@
 ---
-import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import Entries from '../components/Entries.astro';
-import Projects from '../components/Projects.astro';
-import Skills from '../components/Skills.astro';
-import Awards from '../components/Awards.astro';
-import { getEntry } from 'astro:content';
-import { experience } from '../lib/profile';
+import Portfolio from '../layouts/Portfolio.astro';
+import { getEntry, render } from 'astro:content';
 
-const intro = (await getEntry('profile', 'intro'))!.data;
+const intro = (await getEntry('profile', 'intro'))!;
+const { Content } = await render(intro);
 ---
 
-<Base title={`${intro.name}의 포트폴리오`} description={intro.description}>
-  <Hero />
-  <main>
-    <Projects />
-    <Entries id="experience" title="경험" entries={experience} />
-    <Skills />
-    <Awards />
-  </main>
-</Base>
+<Portfolio track={intro.data} Content={Content} ogImage="/og/intro.png" />

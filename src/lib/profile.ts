@@ -4,15 +4,26 @@ import awardsMd from '../content/profile/awards.md?raw';
 import certificationsMd from '../content/profile/certifications.md?raw';
 import skillsMd from '../content/profile/skills.md?raw';
 
-// 화면 순서 = md 파일에 적힌 순서
-export const experience = parseBlocks(experienceMd).map((b) => ({
-  org: field(b, '기관', 'experience.md'),
-  role: field(b, '역할', 'experience.md'),
-  period: field(b, '기간', 'experience.md'),
-  summary: b.summary,
-  bullets: b.bullets,
-  sections: b.sections,
-}));
+const list = (value?: string) => (value ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+
+// 화면 순서 = 분류(EXPERIENCE_GROUPS 순서) → md 파일에 적힌 순서
+export const EXPERIENCE_GROUPS = ['경험', '오픈소스', '학력'];
+export const experience = parseBlocks(experienceMd).map((b) => {
+  const group = field(b, '분류', 'experience.md');
+  if (!EXPERIENCE_GROUPS.includes(group)) {
+    throw new Error(`experience.md: "분류: ${group}"는 ${EXPERIENCE_GROUPS.join(' / ')} 중 하나여야 합니다`);
+  }
+  return {
+    group,
+    org: field(b, '기관', 'experience.md'),
+    url: b.fields['주소'],
+    role: field(b, '역할', 'experience.md'),
+    period: field(b, '기간', 'experience.md'),
+    summary: b.summary,
+    bullets: b.bullets,
+    sections: b.sections,
+  };
+});
 
 export const awards = parseBlocks(awardsMd).map((b) => ({
   date: field(b, '날짜', 'awards.md'),
@@ -30,6 +41,5 @@ export const certifications = parseBlocks(certificationsMd).map((b) => ({
 
 export const skills = parseBlocks(skillsMd).map((b) => ({
   group: field(b, '분류', 'skills.md'),
-  items: field(b, '기술', 'skills.md').split(',').map((s) => s.trim()).filter(Boolean),
-  summary: b.summary,
+  items: list(field(b, '기술', 'skills.md')),
 }));

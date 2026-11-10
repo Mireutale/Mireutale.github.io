@@ -2,8 +2,12 @@
 name: "강태진"
 email: "mireutale@gmail.com"
 github: "https://github.com/Mireutale"
+# 이름 아래 직무명
+role: "백엔드 · 인프라 개발자"
 # 검색 결과·링크 미리보기에 쓰이는 한 줄 소개
-description: "AI를 활용한 개발과 안정적인 인프라 운영에 관심이 많은 개발자"
+description: "AI를 활용한 개발과 안정적인 인프라 운영에 관심이 많은 백엔드·인프라 개발자"
+# 앞에 둘 프로젝트 (src/content/projects 파일 이름, 적은 순서대로). 나머지는 최신순으로 뒤에
+featured: ["fruition", "pilltip", "stress-test"]
 ---
 
 **AI를 활용한 개발과 안정적인 인프라 운영에 관심이 많은 개발자입니다.**

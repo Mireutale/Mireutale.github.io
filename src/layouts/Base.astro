@@ -5,10 +5,13 @@ import Lightbox from '../components/Lightbox.astro';
 interface Props {
   title: string;
   description: string;
+  // 링크 미리보기 이미지 (public 기준 경로, 1200×630 권장)
+  image: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, image } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -27,6 +30,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />

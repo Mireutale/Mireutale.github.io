@@ -2,34 +2,31 @@
 name: "Pilltip"
 period: "2025.03 ~ 2025.12"
 type: "팀"
-featured: true
 role: "설계 · 백엔드 · 웹 프론트 · AI 모델 학습 · 인프라"
 award: "졸업과제 금상 · 부산 데이터 위크 최우수상 · L:AUNCH 장려상 · SW중심대학 디지털 경진대회 후원기업상"
 summary: "복약 이력과 건강 정보로 주의할 약을 확인하고 복약 알림·디지털 문진을 제공하는 3인 졸업과제입니다. 설계와 백엔드·병원용 웹 개발, 알약 인식 모델 학습, 배포·운영을 맡았습니다."
 highlights:
   - value: "92%"
     label: "알약 인식 정답률 (YOLOv8)"
-  - value: "수상 4회"
-    label: "졸업과제 금상 외"
   - value: "10개월"
     label: "온프레미스 직접 운영"
 stack: ["Spring Boot", "MySQL", "Elasticsearch", "Weaviate", "Redis", "Nginx", "Docker", "YOLOv8", "GPT-4o mini"]
 repo: "https://github.com/PillTipKR/Pilltip"
-image: "/img/pilltip/banner.png"
+image: "/img/pilltip/banner.webp"
 gallery:
-  - src: "/img/pilltip/dur.png"
+  - src: "/img/pilltip/dur.webp"
     caption: "개인 맞춤형 DUR 분석 결과"
-  - src: "/img/pilltip/search.png"
+  - src: "/img/pilltip/search.webp"
     caption: "약품 검색 · DUR 위험 태그"
-  - src: "/img/pilltip/search-detail.png"
+  - src: "/img/pilltip/search-detail.webp"
     caption: "약품 상세 · AI 맞춤 안내"
-  - src: "/img/pilltip/reminder.png"
+  - src: "/img/pilltip/reminder.webp"
     caption: "스마트 복약 알림 · 복약 완료율"
-  - src: "/img/pilltip/family.png"
+  - src: "/img/pilltip/family.webp"
     caption: "가족 계정 전환 · 자녀 관리"
-  - src: "/img/pilltip/questionnaire.png"
+  - src: "/img/pilltip/questionnaire.webp"
     caption: "스마트 문진표 QR 제출 · 병원용 웹"
-  - src: "/img/pilltip/chatbot.png"
+  - src: "/img/pilltip/chatbot.webp"
     caption: "AI 챗봇 오케스트레이션 플로우"
 ownStack: ["Spring Boot", "MySQL", "JWT", "AES-GCM", "Nginx", "Docker", "YOLOv8", "Next.js"]
 learned: |
@@ -71,7 +68,7 @@ AI-Hub 데이터를 한 번에 받기에는 서버 용량이 부족했습니다.
 
 ## 서비스 구성과 팀 기능
 
-![Pilltip 시스템 아키텍처](/img/pilltip/architecture.png)
+![Pilltip 시스템 아키텍처](/img/pilltip/architecture.webp)
 
 Android 앱과 병원용 Next.js 웹이 Nginx를 거쳐 Spring Boot 서버에 REST 요청을 보냅니다.\
 서버와 저장소는 Docker로 운영했습니다.\

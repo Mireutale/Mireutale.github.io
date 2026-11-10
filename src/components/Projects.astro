@@ -1,12 +1,28 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ProjectDetail from './ProjectDetail.astro';
+import { imageSize } from '../lib/image';
 
+// featured = 앞에 둘 프로젝트 id (페이지마다 순서가 다름). 나머지는 최신순으로 뒤에
+interface Props {
+  featured: string[];
+}
+
+const { featured } = Astro.props;
 const entries = await getCollection('projects');
-// 주요 프로젝트 먼저, 그 안에서는 최신순
-entries.sort((a, b) => Number(!!b.data.featured) - Number(!!a.data.featured) || b.data.period.localeCompare(a.data.period));
+const unknown = featured.filter((id) => !entries.some((e) => e.id === id));
+if (unknown.length) throw new Error(`featured에 없는 프로젝트가 있습니다: ${unknown.join(', ')}`);
+
+// featured에 적은 순서대로, 나머지는 최신순
+const rank = (id: string) => (featured.includes(id) ? featured.indexOf(id) : featured.length);
+entries.sort((a, b) => rank(a.id) - rank(b.id) || b.data.period.localeCompare(a.data.period));
 const projects = await Promise.all(
-  entries.map(async (e) => ({ ...e.data, id: e.id, Content: (await render(e)).Content })),
+  entries.map(async (e) => ({
+    ...e.data,
+    id: e.id,
+    Content: (await render(e)).Content,
+    thumbSize: e.data.image ? await imageSize(e.data.image) : undefined,
+  })),
 );
 ---
 
@@ -19,16 +35,26 @@ const projects = await Promise.all(
         projects.map((p) => (
           <li>
             <button class="card" type="button" data-target={`project-${p.id}`} aria-label={`${p.name} 상세 보기`}>
-              {p.image && <img class="thumb" src={p.image} alt={`${p.name} 화면`} loading="lazy" />}
+              <span class="thumb-wrap">
+                {p.image && <img class="thumb" src={p.image} alt="" loading="lazy" {...p.thumbSize} style={p.imagePosition && `object-position: ${p.imagePosition}`} />}
+              </span>
               <span class="card-body">
-                <span class="name">{p.name}</span>
-                <span class="meta">
-                  <span class="pill">{p.period}</span>
-                  <span class="pill">{p.type} 프로젝트</span>
-                  {p.role && <span class="pill accent">{p.role}</span>}
-                </span>
+                <span class="name">{p.name} <span class="arrow" aria-hidden="true">↗</span></span>
+                <span class="meta">{p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}</span>
                 <span class="summary">{p.summary}</span>
-                {(p.ownStack || p.stack) && <span class="stack-line">{(p.ownStack || p.stack)!.join(' · ')}</span>}
+                {(p.award || p.highlights) && (
+                  <span class="proof">
+                    {p.award && <span class="award">🏆 {p.award}</span>}
+                    {p.highlights?.map((h) => (
+                      <span class="metric"><strong>{h.value}</strong> {h.label}</span>
+                    ))}
+                  </span>
+                )}
+                {(p.ownStack || p.stack) && (
+                  <span class="tags">
+                    {(p.ownStack || p.stack)!.map((t) => <span class="pill">{t}</span>)}
+                  </span>
+                )}
               </span>
             </button>
           </li>
@@ -77,59 +103,58 @@ const projects = await Promise.all(
 </script>
 
 <style>
-  .section-title {
-    text-align: left;
-    border-bottom: 0;
-    padding-bottom: 0;
-    margin-bottom: var(--s-sm);
-  }
-  .quote {
-    text-align: left;
-  }
+  /* 카드 안쪽 여백만큼 바깥으로 빼서 썸네일·본문 위치를 다른 섹션과 맞춤 (호버 배경만 여백까지 번짐) */
   .grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--s-lg);
-    margin: 0;
+    gap: var(--s-xs);
+    margin: 0 calc(-1 * var(--s-md));
     padding: 0;
     list-style: none;
   }
+  /* 썸네일 목록형: 왼쪽 작은 썸네일, 오른쪽 제목·한 줄 정보·요약·근거 수치·기술 */
   .card {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-columns: var(--col-side) minmax(0, 1fr);
+    gap: var(--s-lg);
     width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 1px solid var(--c-hairline);
+    padding: var(--s-md);
+    border: 0;
     border-radius: var(--r-lg);
-    background: var(--c-canvas);
+    background: none;
     color: var(--c-body);
     font: inherit;
     text-align: left;
     cursor: pointer;
-    overflow: hidden;
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    transition: background 150ms ease;
   }
   .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(10, 10, 10, 0.08);
+    background: var(--c-surface-soft);
+  }
+  .card:hover .name {
+    color: var(--c-link);
+  }
+  .card:hover .arrow {
+    transform: translate(2px, -2px);
+  }
+  .thumb-wrap {
+    padding-top: 4px;
   }
   .thumb {
     display: block;
     width: 100%;
-    height: 100%;
-    min-height: 220px;
+    height: auto;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
     object-position: top;
-    border-right: 1px solid var(--c-hairline);
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--r-sm);
+    background: var(--c-surface-card);
   }
   .card-body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--s-sm);
-    flex: 1;
-    padding: var(--s-lg);
+    gap: var(--s-xs);
     min-width: 0;
   }
   .name {
@@ -137,26 +162,44 @@ const projects = await Promise.all(
     font-weight: 600;
     color: var(--c-ink);
     word-break: keep-all;
+    transition: color 150ms ease;
+  }
+  .arrow {
+    display: inline-block;
+    font-size: 0.8em;
+    transition: transform 150ms ease;
   }
   .meta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: var(--s-xxs);
-  }
-  .accent {
-    background: var(--c-lavender);
-    word-break: keep-all;
-  }
-  .stack-line {
-    margin-top: auto;
-    font-size: var(--t-caption-upper);
+    font-size: var(--t-caption);
     color: var(--c-muted);
     word-break: keep-all;
   }
   .summary {
-    font-size: var(--t-body-sm);
+    max-width: 44em;
     word-break: keep-all;
+  }
+  /* 근거: 수상과 핵심 수치를 한 줄씩 */
+  .proof {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--t-body-sm);
+    color: var(--c-muted);
+    word-break: keep-all;
+  }
+  .award {
+    font-weight: 600;
+    color: var(--c-body-strong);
+  }
+  .metric strong {
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-xxs);
+    margin-top: var(--s-xxs);
   }
 
   .modal {
@@ -277,32 +320,13 @@ const projects = await Promise.all(
       padding: 18px;
     }
   }
-  @media (max-width: 900px) {
-    .card {
-      grid-template-columns: 180px minmax(0, 1fr);
-    }
-  }
   @media (max-width: 640px) {
     .card {
       grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-sm);
     }
-    .thumb {
-      height: auto;
-      min-height: 0;
-      aspect-ratio: 16 / 7;
-      border-right: 0;
-      border-bottom: 1px solid var(--c-hairline);
-    }
-    .card-body {
-      padding: var(--s-md);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .card {
-      transition: none;
-    }
-    .card:hover {
-      transform: none;
+    .thumb-wrap {
+      max-width: 280px;
     }
   }
 </style>

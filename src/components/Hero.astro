@@ -1,9 +1,15 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 
-const intro = (await getEntry('profile', 'intro'))!;
-const { Content } = await render(intro);
-const profile = intro.data;
+// 소개 문단과 직무명은 페이지마다 다르고, 이름·연락처는 intro.md 하나를 공유
+interface Props {
+  role: string;
+  Content: AstroComponentFactory;
+}
+
+const { role, Content } = Astro.props;
+const profile = (await getEntry('profile', 'intro'))!.data;
 ---
 
 <header id="top" class="header container">
@@ -12,6 +18,7 @@ const profile = intro.data;
     <div class="top">
       <div>
         <h1 class="display">{profile.name}</h1>
+        <p class="role">{role}</p>
       </div>
       <div class="contact">
         <p>Email: <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
@@ -53,6 +60,12 @@ const profile = intro.data;
   h1 {
     font-size: var(--t-display-xl);
     letter-spacing: -0.035em;
+  }
+  .role {
+    margin-top: var(--s-xxs);
+    font-size: var(--t-title-lg);
+    font-weight: 600;
+    color: var(--c-muted);
   }
   .contact {
     display: grid;

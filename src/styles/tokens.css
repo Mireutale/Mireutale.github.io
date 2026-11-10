@@ -27,6 +27,9 @@
   --t-caption: 13px;
   --t-caption-upper: 12px;
 
+  /* 섹션 공통 왼쪽 열(기간·분류·썸네일) 폭. 본문 시작 위치를 모든 섹션에서 맞춤 */
+  --col-side: 200px;
+
   --r-xs: 6px;
   --r-sm: 8px;
   --r-md: 12px;

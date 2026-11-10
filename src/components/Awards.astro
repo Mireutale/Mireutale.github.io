@@ -1,54 +1,99 @@
 ---
 import { awards, certifications } from '../lib/profile';
+
+// 경험 섹션과 같은 형식: 왼쪽 날짜, 오른쪽 이름 + 기관 등 부가 정보
+const groups = [
+  {
+    name: '수상',
+    items: awards.map((a) => ({ date: a.date, title: a.title, detail: [a.org, a.team && `팀 ${a.team}`] })),
+  },
+  {
+    name: '자격증',
+    items: certifications.map((c) => ({ date: c.date, title: c.title, detail: [c.grade, c.org] })),
+  },
+];
 ---
 
 <section id="awards" class="section" aria-labelledby="awards-heading">
   <div class="container">
     <h2 id="awards-heading" class="section-title display">수상 및 자격증</h2>
-
-<div class="entry">
-  <div class="entry-side">
-    <h3>수상</h3>
-  </div>
-  <div class="entry-main">
-    <ul>
-      {
-        awards.map((a) => (
-          <li>
-            <span class="date">{a.date} </span>
-            {a.title} · {a.org}{a.team && ` · 팀 ${a.team}`}
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</div>
-
-<div class="entry">
-  <div class="entry-side">
-    <h3>자격증</h3>
-  </div>
-  <div class="entry-main">
-    <ul>
-      {
-        certifications.map((c) => (
-          <li>
-            <span class="date">{c.date} </span>
-            {c.title}
-            {c.grade && ` ${c.grade}`} · {c.org}
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</div>
-
+    {
+      groups.map((g) => (
+        <div class="group">
+          <h3 class="group-title">{g.name}</h3>
+          <ol class="list">
+            {g.items.map((item) => (
+              <li class="item">
+                <p class="when">{item.date}</p>
+                <p class="what">
+                  {item.title}
+                  <span class="detail">{item.detail.filter(Boolean).join(' · ')}</span>
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
   </div>
 </section>
 
 <style>
-  .date {
+  .group + .group {
+    margin-top: var(--s-xl);
+  }
+  .group-title {
+    margin-bottom: var(--s-sm);
+    font-size: var(--t-caption-upper);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--c-muted);
+  }
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .item {
+    display: grid;
+    grid-template-columns: var(--col-side) minmax(0, 1fr);
+    gap: var(--s-lg);
+    padding-block: var(--s-sm);
+    border-top: 1px solid var(--c-hairline);
+  }
+  .when {
+    padding-top: 2px;
+    font-size: var(--t-caption);
+    font-weight: 500;
     color: var(--c-muted);
     font-variant-numeric: tabular-nums;
+  }
+  .what {
+    font-weight: 500;
+    color: var(--c-ink);
+    word-break: keep-all;
+  }
+  .detail {
+    margin-left: var(--s-sm);
+    font-size: var(--t-body-sm);
+    font-weight: 400;
+    color: var(--c-muted);
+  }
+  @media (max-width: 640px) {
+    .item {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+    .detail {
+      display: block;
+      margin-left: 0;
+    }
+  }
+  @media print {
+    .item {
+      grid-template-columns: 130px 1fr;
+      gap: 14px;
+      padding-block: 6px;
+    }
   }
 </style>

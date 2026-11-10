@@ -1,0 +1,48 @@
+<!doctype html>
+<!-- 링크 미리보기 이미지 틀. scripts/og-images.mjs가 ?role=&desc= 를 붙여 1200×630으로 캡처 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; }
+  body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    align-items: center;
+    gap: 64px;
+    padding: 0 96px;
+    box-sizing: border-box;
+    background: #fffaf0;
+    color: #0a0a0a;
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  }
+  img { width: 300px; height: 300px; border-radius: 50%; object-fit: cover; }
+  .role {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 9999px;
+    background: #b8a4ed;
+    font-size: 30px;
+    font-weight: 600;
+  }
+  h1 { margin: 28px 0 20px; font-size: 104px; letter-spacing: -0.04em; line-height: 1; }
+  p { margin: 0; font-size: 30px; line-height: 1.45; color: #3a3a3a; word-break: keep-all; }
+  .url { margin-top: 36px; font-size: 24px; color: #6a6a6a; }
+</style>
+</head>
+<body>
+  <img src="../public/img/profile/avatar.jpeg" alt="" />
+  <div>
+    <span class="role" id="role"></span>
+    <h1>강태진</h1>
+    <p id="desc"></p>
+    <p class="url">mireutale.github.io</p>
+  </div>
+  <script>
+    const q = new URLSearchParams(location.search);
+    document.getElementById('role').textContent = q.get('role');
+    document.getElementById('desc').textContent = q.get('desc');
+  </script>
+</body>
+</html>

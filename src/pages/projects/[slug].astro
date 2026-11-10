@@ -14,7 +14,7 @@ const project = { ...entry.data, id: entry.id, Content };
 const intro = (await getEntry('profile', 'intro'))!.data;
 ---
 
-<Base title={`${project.name} · ${intro.name}의 포트폴리오`} description={project.summary}>
+<Base title={`${project.name} · ${intro.name}의 포트폴리오`} description={project.summary} image={project.image ? `/og/${project.id}.jpg` : '/og/intro.png'}>
   <main class="container page">
     <nav class="back no-print" aria-label="이동">
       <a href="/#projects">← 포트폴리오로</a>
