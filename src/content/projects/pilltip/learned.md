@@ -28,13 +28,13 @@ HTTPS 인증서는 무료이면서 발급과 갱신이 쉬운 ZeroSSL을 골랐�
 <summary>참고한 자료</summary>
 
 - 이전 데이터 일부 섞기(리플레이)
-  - [Ultralytics 파인튜닝 가이드](https://docs.ultralytics.com/guides/finetuning-guide): 새 데이터로 다시 학습할 때 원래 데이터를 함께 넣지 않으면 망각을 피하기 어렵다고 설명합니다. 섞는 비율은 검증 성능을 보며 정하도록 안내합니다.
-  - [Ultralytics 용어 설명: Catastrophic Forgetting](https://www.ultralytics.com/glossary/catastrophic-forgetting): 데이터를 섞는 방법을 망각 방지 방법으로 소개합니다.
-  - [Continual Learning and Catastrophic Forgetting (2024)](https://arxiv.org/pdf/2403.05175): 리플레이를 가장 널리 쓰이는 망각 방지 방법으로 꼽고, 이전 데이터의 작은 일부만 다시 학습해도 충분할 수 있다고 설명합니다.
-  - [Teach YOLO to Remember (2025)](https://arxiv.org/html/2503.04688v1): YOLO에 리플레이를 함께 쓰면 망각이 크게 줄어든다고 보고합니다.
+  - [Ultralytics 파인튜닝 가이드](https://docs.ultralytics.com/guides/finetuning-guide)
+  - [Ultralytics 용어 설명: Catastrophic Forgetting](https://www.ultralytics.com/glossary/catastrophic-forgetting)
+  - [Continual Learning and Catastrophic Forgetting (2024)](https://arxiv.org/pdf/2403.05175)
+  - [Teach YOLO to Remember (2025)](https://arxiv.org/html/2503.04688v1)
 - 기준을 넘어야 다음 단계로(커리큘럼 학습)
-  - [Achieving Goals using Reward Shaping and Curriculum Learning (2022)](https://arxiv.org/pdf/2206.02462): 정확도가 기준을 넘으면 다음 단계로 넘어가는 방식에서, 90% 기준이 학습 시간과 성능의 균형이 가장 좋았다고 보고합니다.
-  - [Mastery learning](https://en.wikipedia.org/wiki/Mastery_learning): 90%처럼 일정 수준을 익혀야 다음 단계로 넘어가는 숙달 학습의 개념입니다.
+  - [Achieving Goals using Reward Shaping and Curriculum Learning (2022)](https://arxiv.org/pdf/2206.02462)
+  - [Mastery learning](https://en.wikipedia.org/wiki/Mastery_learning)
 
 </details>
 
