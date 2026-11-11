@@ -22,7 +22,8 @@
 - 정규·자유 멘토링에서 서비스를 기획하고 개발·운영하는 데 필요한 지식과 역량을 쌓음
 - 서비스 기획과 MVP 범위, 백엔드 아키텍처와 시스템 안정화, Agentic AI 활용 방식에 대해 피드백을 받아 설계에 반영
 - 요구사항 구체화부터 구현 계획, 코드 작성, 테스트, 문서화까지 생성형 AI를 활용하고, 결과물은 코드 리뷰와 테스트로 검증한 뒤 반영
-- AWS 공식 교육 Cloud Architecture 트랙 수료: Architecting on AWS · Agentic AI Foundations · Building Agentic AI with Amazon Bedrock AgentCore
+- AWS 공식 교육 Cloud Architecture 트랙 수료
+  - Architecting on AWS · Agentic AI Foundations · Building Agentic AI with Amazon Bedrock AgentCore
 
 ---
 분류: 경험
