@@ -16,7 +16,7 @@ npm run build
 - `profile/awards.md` 수상
 - `profile/certifications.md` 자격증
 - `profile/skills.md` 기술 스택
-- `projects/<이름>/` 프로젝트 (폴더 하나 = 프로젝트 하나, 상세 페이지 `/projects/<이름>`)
+- `projects/<이름>/` 프로젝트 (폴더 하나 = 프로젝트 하나)
   - `index.md` 카드·상단 정보 (이름, 기간, 요약, 수치, 기술, 화면 이미지)
   - `detail.md` 상세 본문
   - `learned.md` 배운 것

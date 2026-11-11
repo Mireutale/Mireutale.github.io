@@ -2,16 +2,13 @@
 import { imageSize } from '../lib/image';
 import type { Project } from '../lib/project';
 
-// 모달·인쇄·풀 페이지가 공유하는 프로젝트 상세
+// 모달·인쇄가 공유하는 프로젝트 상세
 interface Props {
   project: Project;
-  variant: 'modal' | 'print' | 'page';
-  // 직무 페이지(backend 등)에서 열었으면 전체 페이지도 그 직무 본문으로 연결
-  track?: string;
+  variant: 'modal' | 'print';
 }
 
-const { project: p, variant, track } = Astro.props;
-const Title = variant === 'page' ? 'h1' : 'h3';
+const { project: p, variant } = Astro.props;
 const showBanner = !!p.image;
 const bannerSize = p.image ? await imageSize(p.image) : undefined;
 ---
@@ -23,15 +20,12 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
   {p.period} · {p.type} 프로젝트{p.role && ` · ${p.role}`}
 </p>
 <div class="title-row">
-  <Title id={variant === 'modal' ? `project-${p.id}-title` : undefined} class="title display">{p.name}</Title>
+  <h3 id={variant === 'modal' ? `project-${p.id}-title` : undefined} class="title display">{p.name}</h3>
   {variant !== 'print' && p.repo && (
     <a class="btn btn-primary" href={p.repo} target="_blank" rel="noopener">GitHub →</a>
   )}
   {variant !== 'print' && p.demo && (
     <a class="btn btn-primary" href={p.demo} target="_blank" rel="noopener">▶ 시연 영상</a>
-  )}
-  {variant === 'modal' && (
-    <a class="btn btn-secondary" href={`${track ? `/${track}` : ''}/projects/${p.id}/`}>전체 페이지 ↗</a>
   )}
   </div>
 {p.award && <p class="award">🏆 {p.award}</p>}
@@ -46,8 +40,8 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
   </dl>
 )}
 {p.ownStack && p.ownStack.length > 0 && (
-  <p class="stack-label">직접 사용한 기술</p>
-  <ul class="stack" aria-label="직접 사용한 기술">
+  <p class="stack-label">Skills</p>
+  <ul class="stack" aria-label="Skills">
     {p.ownStack.map((s) => <li class="pill">{s}</li>)}
   </ul>
 )}
@@ -272,7 +266,7 @@ const bannerSize = p.image ? await imageSize(p.image) : undefined;
     border-radius: var(--r-md);
     break-inside: avoid;
   }
-  /* 모달·전체 페이지 공통: 넓은 창에서는 배너를 왼쪽, 제목·지표를 오른쪽에 두어 배너가 잘리지 않고 첫 화면에 본문이 보이게 */
+  /* 모달: 넓은 창에서는 배너를 왼쪽, 제목·지표를 오른쪽에 두어 배너가 잘리지 않고 첫 화면에 본문이 보이게 */
   @media (min-width: 900px) {
     .split {
       display: grid;

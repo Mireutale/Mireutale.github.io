@@ -118,17 +118,6 @@ button:focus-visible {
   background: var(--c-primary-active);
 }
 
-.btn-secondary,
-.btn-secondary:hover {
-  background: var(--c-canvas);
-  color: var(--c-ink);
-  border: 1px solid var(--c-hairline);
-}
-
-.btn-secondary:hover {
-  background: var(--c-surface-soft);
-}
-
 .pill {
   display: inline-block;
   padding: 4px 12px;
